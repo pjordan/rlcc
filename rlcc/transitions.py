@@ -1,6 +1,7 @@
 """Transition-related functions"""
 
-from collections import deque,namedtuple
+from collections import deque, namedtuple
+import random
 import numpy as np
 import torch
 from torch.utils.data.dataloader import DataLoader
@@ -9,6 +10,11 @@ Transition = namedtuple(
     "Transition",
     field_names=["state", "action", "reward", "next_state", "is_terminal"])
 
+def _make_tensor(x):
+    return torch.tensor(x, dtype=torch.float)
+
+def to_device(transition, device):
+    map(lambda x: x.to(device), transition)
 
 def transition(*args):
     r"""Creates a transition object from arguments.
@@ -23,8 +29,8 @@ def transition(*args):
     return Transition(*args)
 
 
-def from_numpy(*args):
-    r"""Creates a transition object from numpy arguments.
+def make(*args):
+    r"""Creates a transition object from non-tensor arguments.
 
     Arguments:
         state (numpy array): The state the transition is from.
@@ -33,28 +39,18 @@ def from_numpy(*args):
         next_state (numpy array): The state the transition is to.
         is_terminal (numpy array): If terminal then 1.0, 0.0 otherwise.
     """
-    return transition(*map(lambda x: torch.from_numpy(x).float(), args))
+    return transition(*map(_make_tensor, args))
 
 
-def from_primitives(state, action, reward, next_state, is_terminal):
-    r"""Creates a transition object from primitive arguments.
+def buffer(buffer_size=int(1e5)):
+    r"""Creates a buffer.
 
     Arguments:
-        state (array): The state the transition is from.
-        action (array): The action taken in the transition.
-        reward (array): The reward for transitioning.
-        next_state (array): The state the transition is to.
-        is_terminal (array): If terminal then 1.0, 0.0 otherwise.
+        buffer_size (int): the buffer size.
     """
-    return from_numpy(
-        np.array(state),
-        np.array(action),
-        np.array(reward),
-        np.array(next_state),
-        np.array(is_terminal).astype(np.uint8))
+    return deque(maxlen=buffer_size)
 
-
-def collate(transitions):
+def default_collate(transitions):
     r"""Creates a collated transition object from a list of
     transitions.
 
@@ -67,19 +63,58 @@ def collate(transitions):
     return transition(*map(torch.stack, zip(*transitions)))
 
 
-def replay_buffer(buffer_size=int(1e5)):
-    r"""Creates a replay buffer.
+class _TransitionReplayerIter(object):
+    r"""Iterates over the TransitionReplayer's transitions."""
+    def __init__(self, replayer):
+        self.transitions = replayer.transitions
+        self.batch_size = replayer.batch_size
+        self.collate_fn = replayer.collate_fn
+        self.device = replayer.device
+
+    def __len__(self):
+        return len(self.transitions)
+    
+    def __next__(self):
+        batch = self.collate_fn(random.sample(self.transitions, k=self.batch_size))
+        if self.device:
+            to_device(batch, self.device)
+        return batch
+        
+    def __iter__(self):
+        return self
+
+
+class TransitionReplayer(object):
+    r"""
+    Transition Replayer. 
 
     Arguments:
-        buffer_size (int): the buffer size.
+        transitions: dataset from which to replay the transitions.
+        device (string, optional): the device to send the transition data to
+        batch_size (int, optional): how many samples per batch to load
+            (default: 1).
+        collate_fn (callable, optional): merges a list of samples to form a mini-batch.
     """
-    return deque(maxlen=buffer_size)
 
+    __initialized = False
 
-def data_loader(transitions, batch_size=128):
-    r"""Creates a ``DataLoader`` for transitions from a list of transitions.
+    def __init__(self, transitions, device=None, batch_size=1, collate_fn=default_collate):
+        self.transitions = transitions
+        self.batch_size = batch_size
+        self.collate_fn = collate_fn
+        self.device = device
+        self.__initialized = True
 
-    Arguments:
-        batch_size (int): the batch size.
-    """
-    return DataLoader(transitions, batch_size=batch_size, collate_fn=collate)
+    def __setattr__(self, attr, val):
+        if self.__initialized and attr in ('batch_size', 'collate_fn'):
+            raise ValueError('{} attribute should not be set after {} is '
+                             'initialized'.format(attr, self.__class__.__name__))
+
+        super(TransitionReplayer, self).__setattr__(attr, val)
+
+    def __iter__(self):
+        return _TransitionReplayerIter(self)
+    
+    def __len__(self):
+        """Return the current size of internal memory."""
+        return len(self.transitions)    
