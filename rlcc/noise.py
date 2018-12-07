@@ -38,3 +38,28 @@ class OUProcess(NoiseProcess):
         dx = self.theta * (self.mu - x) + self.sigma * np.random.randn(len(x))
         self.state = x + dx
         return self.state * self.scale
+    
+class ScheduledOUProcess(NoiseProcess):
+    """Ornstein-Uhlenbeck process."""
+    
+    def __init__(self, action_dimension, scale_schedule, mu=0, theta=0.15, sigma=0.2):
+        super(ScheduledOUProcess, self).__init__()
+        self.action_dimension = action_dimension
+        self.scale_schedule = scale_schedule
+        self.mu = mu
+        self.theta = theta
+        self.sigma = sigma
+        self.state = np.ones(self.action_dimension) * self.mu
+        self.reset()
+
+    def reset(self):
+        self.state = np.ones(self.action_dimension) * self.mu
+
+    def sample(self):
+        x = self.state
+        dx = self.theta * (self.mu - x) + self.sigma * np.random.randn(len(x))
+        self.state = x + dx
+        scaled_state = self.state * self.scale_schedule.value()
+        self.scale_schedule.update()
+        return scaled_state
+

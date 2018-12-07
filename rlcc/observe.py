@@ -1,3 +1,5 @@
+from . import transitions
+
 class Observer():
     r"""Base class for all learners.
     """
@@ -44,4 +46,22 @@ class PreprocessingObserver(Observer):
         Arguments:
             transition (Transition): the observered transition
         """
-        self.base_observer(self.preprocessing_fn(transition))
+        self.base_observer.observe(self.preprocessing_fn(transition))
+
+
+class StackedObserver(Observer):
+    r"""Observer where each transition decomposed such that 
+        each component is observed respectively"""
+
+    def __init__(self, observers):
+        super(StackedObserver, self).__init__()
+        self.observers = observers
+
+    def observe(self, transition):
+        r"""Observe a transition.
+
+        Arguments:
+            transition (Transition): the observered transition
+        """
+        for t, o in zip(zip(*transition), self.observers):
+            o.observe(t)

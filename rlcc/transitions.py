@@ -13,9 +13,6 @@ Transition = namedtuple(
 def _make_tensor(x):
     return torch.tensor(x, dtype=torch.float)
 
-def to_device(transition, device):
-    map(lambda x: x.to(device), transition)
-
 def transition(*args):
     r"""Creates a transition object from arguments.
 
@@ -27,6 +24,10 @@ def transition(*args):
         is_terminal (tensor): If terminal then 1.0, 0.0 otherwise.
     """
     return Transition(*args)
+
+
+def to_device(trans, device):
+    return transition(*map(lambda x: x.to(device), trans))
 
 
 def make(*args):
@@ -41,6 +42,14 @@ def make(*args):
     """
     return transition(*map(_make_tensor, args))
 
+
+def star_make(tuple_of_args):
+    r"""Creates a transition object from non-tensor arguments.
+
+    Arguments:
+        tuple_of_args (tuple): non-tensor tuple of (s,a,r,s',is_term)
+    """
+    return make(*tuple_of_args)
 
 def buffer(buffer_size=int(1e5)):
     r"""Creates a buffer.
@@ -77,8 +86,9 @@ class _TransitionReplayerIter(object):
     def __next__(self):
         batch = self.collate_fn(random.sample(self.transitions, k=self.batch_size))
         if self.device:
-            to_device(batch, self.device)
-        return batch
+            return to_device(batch, self.device)
+        else:
+            return batch
         
     def __iter__(self):
         return self

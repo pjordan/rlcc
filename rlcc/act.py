@@ -23,7 +23,7 @@ class NetworkActor(Actor):
 
     def act(self, state):
         """Returns actions for given state as numpy array."""
-        state = torch.from_numpy(state).float().to(self.device)
+        state = torch.from_numpy(state).float().unsqueeze(0).to(self.device)
         self.network.eval()
         with torch.no_grad():
             action = self.network(state).cpu().data.numpy()
@@ -43,5 +43,14 @@ class NoisyActor(Actor):
  
     def act(self, state):
         """Returns actions for given state as numpy array."""
-        action = self.base_actor(state) + self.noise_process.sample()
+        action = self.base_actor.act(state) + self.noise_process.sample()
         return np.clip(action, self.action_min, self.action_max)
+    
+class StackedActor(Actor):
+    def __init__(self, actors):
+        super(StackedActor, self).__init__()
+        self.actors = actors
+        
+    def act(self, state):
+        """Returns actions for given state as numpy array."""
+        return np.vstack([actor.act(state[i]) for i, actor in enumerate(self.actors)])
