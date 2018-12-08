@@ -76,8 +76,18 @@
               
             
             
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../rlcc.html">rlcc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../act.html">rlcc.act</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../learn.html">rlcc.learn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../noise.html">rlcc.noise</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../observe.html">rlcc.observe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../replay.html">rlcc.replay</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../schedule.html">rlcc.schedule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../storage.html">rlcc.storage</a></li>
+</ul>
+
             
           
         </div>
@@ -145,22 +155,22 @@
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">random</span>
 
-<div class="viewcode-block" id="NoiseProcess"><a class="viewcode-back" href="../../index.html#rlcc.noise.NoiseProcess">[docs]</a><span class="k">class</span> <span class="nc">NoiseProcess</span><span class="p">():</span>
+<div class="viewcode-block" id="NoiseProcess"><a class="viewcode-back" href="../../noise.html#rlcc.noise.NoiseProcess">[docs]</a><span class="k">class</span> <span class="nc">NoiseProcess</span><span class="p">():</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Base class for all noise processes.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
 
-<div class="viewcode-block" id="NoiseProcess.reset"><a class="viewcode-back" href="../../index.html#rlcc.noise.NoiseProcess.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NoiseProcess.reset"><a class="viewcode-back" href="../../noise.html#rlcc.noise.NoiseProcess.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Reset the noise process.&quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="NoiseProcess.sample"><a class="viewcode-back" href="../../index.html#rlcc.noise.NoiseProcess.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NoiseProcess.sample"><a class="viewcode-back" href="../../noise.html#rlcc.noise.NoiseProcess.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Sample the noise process.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
 
 <span class="c1"># Based on https://github.com/songrotek/DDPG/blob/master/ou_noise.py</span>
-<div class="viewcode-block" id="OUProcess"><a class="viewcode-back" href="../../index.html#rlcc.noise.OUProcess">[docs]</a><span class="k">class</span> <span class="nc">OUProcess</span><span class="p">(</span><span class="n">NoiseProcess</span><span class="p">):</span>
+<div class="viewcode-block" id="OUProcess"><a class="viewcode-back" href="../../noise.html#rlcc.noise.OUProcess">[docs]</a><span class="k">class</span> <span class="nc">OUProcess</span><span class="p">(</span><span class="n">NoiseProcess</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Ornstein-Uhlenbeck process.&quot;&quot;&quot;</span>
     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action_dimension</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
@@ -173,16 +183,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_dimension</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
-<div class="viewcode-block" id="OUProcess.reset"><a class="viewcode-back" href="../../index.html#rlcc.noise.OUProcess.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OUProcess.reset"><a class="viewcode-back" href="../../noise.html#rlcc.noise.OUProcess.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_dimension</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span></div>
 
-<div class="viewcode-block" id="OUProcess.sample"><a class="viewcode-back" href="../../index.html#rlcc.noise.OUProcess.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OUProcess.sample"><a class="viewcode-back" href="../../noise.html#rlcc.noise.OUProcess.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span>
         <span class="n">dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">dx</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span></div></div>
     
-<div class="viewcode-block" id="ScheduledOUProcess"><a class="viewcode-back" href="../../index.html#rlcc.noise.ScheduledOUProcess">[docs]</a><span class="k">class</span> <span class="nc">ScheduledOUProcess</span><span class="p">(</span><span class="n">NoiseProcess</span><span class="p">):</span>
+<div class="viewcode-block" id="ScheduledOUProcess"><a class="viewcode-back" href="../../noise.html#rlcc.noise.ScheduledOUProcess">[docs]</a><span class="k">class</span> <span class="nc">ScheduledOUProcess</span><span class="p">(</span><span class="n">NoiseProcess</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Ornstein-Uhlenbeck process.&quot;&quot;&quot;</span>
     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action_dimension</span><span class="p">,</span> <span class="n">scale_schedule</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
@@ -195,10 +205,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_dimension</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
-<div class="viewcode-block" id="ScheduledOUProcess.reset"><a class="viewcode-back" href="../../index.html#rlcc.noise.ScheduledOUProcess.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ScheduledOUProcess.reset"><a class="viewcode-back" href="../../noise.html#rlcc.noise.ScheduledOUProcess.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_dimension</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span></div>
 
-<div class="viewcode-block" id="ScheduledOUProcess.sample"><a class="viewcode-back" href="../../index.html#rlcc.noise.ScheduledOUProcess.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ScheduledOUProcess.sample"><a class="viewcode-back" href="../../noise.html#rlcc.noise.ScheduledOUProcess.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span>
         <span class="n">dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">dx</span>
