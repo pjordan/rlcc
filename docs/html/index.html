@@ -1,0 +1,552 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Welcome to rlcc’s documentation! &#8212; rlcc  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-rlcc-s-documentation">
+<h1>Welcome to rlcc’s documentation!<a class="headerlink" href="#welcome-to-rlcc-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+<span class="target" id="module-rlcc"></span><p>RL Common Components</p>
+<p>The rlcc package contains data structures and algorithms for common components 
+of reinforcement learning.</p>
+<p>The package uses pytorch for underlying tensor operations.</p>
+<dl class="function">
+<dt id="rlcc.transition">
+<code class="descclassname">rlcc.</code><code class="descname">transition</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc.html#transition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.transition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a transition object from arguments.</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>state (tensor): The state the transition is from.
+action (tensor): The action taken in the transition.
+reward (tensor): The reward for transitioning.
+next_state (tensor): The state the transition is to.
+is_terminal (tensor): If terminal then 1.0, 0.0 otherwise.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="rlcc.tensor">
+<code class="descclassname">rlcc.</code><code class="descname">tensor</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc.html#tensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.tensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs a torch <cite>tensor</cite> with data that returns
+a tensor of float data type.</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>data (array_like) – Initial data for the tensor. 
+Can be a list, tuple, NumPy ndarray, scalar, and other types.</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.Transition">
+<em class="property">class </em><code class="descclassname">rlcc.</code><code class="descname">Transition</code><span class="sig-paren">(</span><em>state</em>, <em>action</em>, <em>reward</em>, <em>next_state</em>, <em>is_terminal</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcc.Transition" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="rlcc.Transition.action">
+<code class="descname">action</code><a class="headerlink" href="#rlcc.Transition.action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rlcc.Transition.is_terminal">
+<code class="descname">is_terminal</code><a class="headerlink" href="#rlcc.Transition.is_terminal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 4</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rlcc.Transition.next_state">
+<code class="descname">next_state</code><a class="headerlink" href="#rlcc.Transition.next_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rlcc.Transition.reward">
+<code class="descname">reward</code><a class="headerlink" href="#rlcc.Transition.reward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rlcc.Transition.state">
+<code class="descname">state</code><a class="headerlink" href="#rlcc.Transition.state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-rlcc.act"></span><dl class="class">
+<dt id="rlcc.act.Actor">
+<em class="property">class </em><code class="descclassname">rlcc.act.</code><code class="descname">Actor</code><a class="reference internal" href="_modules/rlcc/act.html#Actor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.Actor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all actors.</p>
+<dl class="method">
+<dt id="rlcc.act.Actor.act">
+<code class="descname">act</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#Actor.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.Actor.act" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns actions for given state as numpy array.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.act.ClippingActor">
+<em class="property">class </em><code class="descclassname">rlcc.act.</code><code class="descname">ClippingActor</code><span class="sig-paren">(</span><em>base_actor</em>, <em>action_min=-1</em>, <em>action_max=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#ClippingActor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.ClippingActor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements an actor policy that clips the actions.</p>
+<dl class="method">
+<dt id="rlcc.act.ClippingActor.act">
+<code class="descname">act</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#ClippingActor.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.ClippingActor.act" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns actions for given state as numpy array.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.act.NetworkActor">
+<em class="property">class </em><code class="descclassname">rlcc.act.</code><code class="descname">NetworkActor</code><span class="sig-paren">(</span><em>network</em>, <em>device</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#NetworkActor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.NetworkActor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements Deterministic Policy Gradient.</p>
+<dl class="method">
+<dt id="rlcc.act.NetworkActor.act">
+<code class="descname">act</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#NetworkActor.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.NetworkActor.act" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns actions for given state as numpy array.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.act.NoisyActor">
+<em class="property">class </em><code class="descclassname">rlcc.act.</code><code class="descname">NoisyActor</code><span class="sig-paren">(</span><em>base_actor</em>, <em>noise_process</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#NoisyActor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.NoisyActor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements a noisy actor policy.</p>
+<dl class="method">
+<dt id="rlcc.act.NoisyActor.act">
+<code class="descname">act</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#NoisyActor.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.NoisyActor.act" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns actions for given state as numpy array.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.act.StackedActor">
+<em class="property">class </em><code class="descclassname">rlcc.act.</code><code class="descname">StackedActor</code><span class="sig-paren">(</span><em>actors</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#StackedActor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.StackedActor" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="rlcc.act.StackedActor.act">
+<code class="descname">act</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#StackedActor.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.StackedActor.act" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns actions for given state as numpy array.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-rlcc.learn"></span><dl class="class">
+<dt id="rlcc.learn.DPG">
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">DPG</code><span class="sig-paren">(</span><em>actor_triad</em>, <em>critic_triad</em>, <em>device</em>, <em>gamma=0.99</em>, <em>tau=0.001</em>, <em>writer=None</em>, <em>write_frequency=1</em>, <em>write_prefix=''</em>, <em>actor_norm_clip=None</em>, <em>critic_norm_clip=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DPG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DPG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements Deterministic Policy Gradient.</p>
+<dl class="method">
+<dt id="rlcc.learn.DPG.step">
+<code class="descname">step</code><span class="sig-paren">(</span><em>transitions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DPG.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DPG.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a single learning step.</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>transitions (list of Transition): transitions</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.learn.Learner">
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">Learner</code><a class="reference internal" href="_modules/rlcc/learn.html#Learner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.Learner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all learners.</p>
+<dl class="method">
+<dt id="rlcc.learn.Learner.learn">
+<code class="descname">learn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#Learner.learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.Learner.learn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a single learning step.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.learn.LearningStrategy">
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">LearningStrategy</code><a class="reference internal" href="_modules/rlcc/learn.html#LearningStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.LearningStrategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all learning strategies.</p>
+<dl class="method">
+<dt id="rlcc.learn.LearningStrategy.step">
+<code class="descname">step</code><span class="sig-paren">(</span><em>transitions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#LearningStrategy.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.LearningStrategy.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a single learning step.</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>transitions (list of Transition): transitions</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.learn.ReplayLearner">
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">ReplayLearner</code><span class="sig-paren">(</span><em>learning_strategy</em>, <em>transitions</em>, <em>device=None</em>, <em>batch_size=128</em>, <em>batches_per_step=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#ReplayLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.ReplayLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements a learner using a replay buffer.</p>
+<dl class="method">
+<dt id="rlcc.learn.ReplayLearner.learn">
+<code class="descname">learn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#ReplayLearner.learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.ReplayLearner.learn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a single learning step.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.learn.StackedLearner">
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">StackedLearner</code><span class="sig-paren">(</span><em>learners</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#StackedLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.StackedLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements a learner that delegates to other learners.</p>
+<dl class="method">
+<dt id="rlcc.learn.StackedLearner.learn">
+<code class="descname">learn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#StackedLearner.learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.StackedLearner.learn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a single learning step.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-rlcc.noise"></span><dl class="class">
+<dt id="rlcc.noise.NoiseProcess">
+<em class="property">class </em><code class="descclassname">rlcc.noise.</code><code class="descname">NoiseProcess</code><a class="reference internal" href="_modules/rlcc/noise.html#NoiseProcess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.noise.NoiseProcess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all noise processes.</p>
+<dl class="method">
+<dt id="rlcc.noise.NoiseProcess.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/noise.html#NoiseProcess.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.noise.NoiseProcess.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the noise process.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.noise.NoiseProcess.sample">
+<code class="descname">sample</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/noise.html#NoiseProcess.sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.noise.NoiseProcess.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample the noise process.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.noise.OUProcess">
+<em class="property">class </em><code class="descclassname">rlcc.noise.</code><code class="descname">OUProcess</code><span class="sig-paren">(</span><em>action_dimension</em>, <em>scale=1.0</em>, <em>mu=0</em>, <em>theta=0.15</em>, <em>sigma=0.2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/noise.html#OUProcess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.noise.OUProcess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ornstein-Uhlenbeck process.</p>
+<dl class="method">
+<dt id="rlcc.noise.OUProcess.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/noise.html#OUProcess.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.noise.OUProcess.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the noise process.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.noise.OUProcess.sample">
+<code class="descname">sample</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/noise.html#OUProcess.sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.noise.OUProcess.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample the noise process.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.noise.ScheduledOUProcess">
+<em class="property">class </em><code class="descclassname">rlcc.noise.</code><code class="descname">ScheduledOUProcess</code><span class="sig-paren">(</span><em>action_dimension</em>, <em>scale_schedule</em>, <em>mu=0</em>, <em>theta=0.15</em>, <em>sigma=0.2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/noise.html#ScheduledOUProcess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.noise.ScheduledOUProcess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ornstein-Uhlenbeck process.</p>
+<dl class="method">
+<dt id="rlcc.noise.ScheduledOUProcess.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/noise.html#ScheduledOUProcess.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.noise.ScheduledOUProcess.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the noise process.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.noise.ScheduledOUProcess.sample">
+<code class="descname">sample</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/noise.html#ScheduledOUProcess.sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.noise.ScheduledOUProcess.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample the noise process.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-rlcc.observe"></span><dl class="class">
+<dt id="rlcc.observe.BufferedObserver">
+<em class="property">class </em><code class="descclassname">rlcc.observe.</code><code class="descname">BufferedObserver</code><span class="sig-paren">(</span><em>buffer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/observe.html#BufferedObserver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.observe.BufferedObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements Deterministic Policy Gradient.</p>
+<dl class="method">
+<dt id="rlcc.observe.BufferedObserver.observe">
+<code class="descname">observe</code><span class="sig-paren">(</span><em>transition</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/observe.html#BufferedObserver.observe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.observe.BufferedObserver.observe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Observe a transition.</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>transition (Transition): the observered transition</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.observe.Observer">
+<em class="property">class </em><code class="descclassname">rlcc.observe.</code><code class="descname">Observer</code><a class="reference internal" href="_modules/rlcc/observe.html#Observer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.observe.Observer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all learners.</p>
+<dl class="method">
+<dt id="rlcc.observe.Observer.observe">
+<code class="descname">observe</code><span class="sig-paren">(</span><em>transition</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/observe.html#Observer.observe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.observe.Observer.observe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Observe a transition.</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>transition (Transition): the observered transition</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.observe.PreprocessingObserver">
+<em class="property">class </em><code class="descclassname">rlcc.observe.</code><code class="descname">PreprocessingObserver</code><span class="sig-paren">(</span><em>base_observer</em>, <em>preprocessing_fn</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/observe.html#PreprocessingObserver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.observe.PreprocessingObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements Deterministic Policy Gradient.</p>
+<dl class="method">
+<dt id="rlcc.observe.PreprocessingObserver.observe">
+<code class="descname">observe</code><span class="sig-paren">(</span><em>transition</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/observe.html#PreprocessingObserver.observe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.observe.PreprocessingObserver.observe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Observe a transition.</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>transition (Transition): the observered transition</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.observe.StackedObserver">
+<em class="property">class </em><code class="descclassname">rlcc.observe.</code><code class="descname">StackedObserver</code><span class="sig-paren">(</span><em>observers</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/observe.html#StackedObserver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.observe.StackedObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Observer where each transition decomposed such that 
+each component is observed respectively</p>
+<dl class="method">
+<dt id="rlcc.observe.StackedObserver.observe">
+<code class="descname">observe</code><span class="sig-paren">(</span><em>transition</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/observe.html#StackedObserver.observe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.observe.StackedObserver.observe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Observe a transition.</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>transition (Transition): the observered transition</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-rlcc.replay"></span><p>Transition-related functions</p>
+<dl class="class">
+<dt id="rlcc.replay.TransitionReplayer">
+<em class="property">class </em><code class="descclassname">rlcc.replay.</code><code class="descname">TransitionReplayer</code><span class="sig-paren">(</span><em>transitions</em>, <em>device=None</em>, <em>batch_size=1</em>, <em>collate_fn=&lt;function default_collate&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/replay.html#TransitionReplayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.replay.TransitionReplayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transition Replayer.</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>transitions: dataset from which to replay the transitions.
+device (string, optional): the device to send the transition data to
+batch_size (int, optional): how many samples per batch to load (default: 1).
+collate_fn (callable, optional): merges a list of samples to form a mini-batch.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="rlcc.replay.default_collate">
+<code class="descclassname">rlcc.replay.</code><code class="descname">default_collate</code><span class="sig-paren">(</span><em>transitions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/replay.html#default_collate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.replay.default_collate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a collated transition object from a list of
+transitions.</p>
+<p>The resulting transition will contain a tensor for each element
+that is the stack of the corresponding list of respective elements.</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>transitions (array): list of transitions.</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-rlcc.schedule"></span><dl class="class">
+<dt id="rlcc.schedule.BoundedSchedule">
+<em class="property">class </em><code class="descclassname">rlcc.schedule.</code><code class="descname">BoundedSchedule</code><span class="sig-paren">(</span><em>schedule</em>, <em>min=None</em>, <em>max=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#BoundedSchedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.BoundedSchedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linearly updating schedule</p>
+<dl class="method">
+<dt id="rlcc.schedule.BoundedSchedule.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#BoundedSchedule.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.BoundedSchedule.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the schedule.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.schedule.BoundedSchedule.value">
+<code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#BoundedSchedule.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.BoundedSchedule.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.schedule.ExponentialSchedule">
+<em class="property">class </em><code class="descclassname">rlcc.schedule.</code><code class="descname">ExponentialSchedule</code><span class="sig-paren">(</span><em>initial</em>, <em>decay</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#ExponentialSchedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.ExponentialSchedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linearly updating schedule</p>
+<dl class="method">
+<dt id="rlcc.schedule.ExponentialSchedule.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#ExponentialSchedule.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.ExponentialSchedule.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the schedule.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.schedule.ExponentialSchedule.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#ExponentialSchedule.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.ExponentialSchedule.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the schedule.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.schedule.ExponentialSchedule.value">
+<code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#ExponentialSchedule.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.ExponentialSchedule.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.schedule.LinearSchedule">
+<em class="property">class </em><code class="descclassname">rlcc.schedule.</code><code class="descname">LinearSchedule</code><span class="sig-paren">(</span><em>initial</em>, <em>delta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#LinearSchedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.LinearSchedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linearly updating schedule</p>
+<dl class="method">
+<dt id="rlcc.schedule.LinearSchedule.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#LinearSchedule.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.LinearSchedule.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the schedule.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.schedule.LinearSchedule.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#LinearSchedule.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.LinearSchedule.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the schedule.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.schedule.LinearSchedule.value">
+<code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#LinearSchedule.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.LinearSchedule.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.schedule.Schedule">
+<em class="property">class </em><code class="descclassname">rlcc.schedule.</code><code class="descname">Schedule</code><a class="reference internal" href="_modules/rlcc/schedule.html#Schedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.Schedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all schedules.</p>
+<dl class="method">
+<dt id="rlcc.schedule.Schedule.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#Schedule.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.Schedule.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the schedule.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.schedule.Schedule.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#Schedule.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.Schedule.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the schedule.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.schedule.Schedule.value">
+<code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#Schedule.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.Schedule.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-rlcc.storage"></span><p>Strorage-related functions</p>
+<dl class="function">
+<dt id="rlcc.storage.buffer">
+<code class="descclassname">rlcc.storage.</code><code class="descname">buffer</code><span class="sig-paren">(</span><em>buffer_size=100000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/storage.html#buffer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.storage.buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a buffer.</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>buffer_size (int): the buffer size.</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">rlcc</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Patrick R. Jordan.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,7 +1,7 @@
 from itertools import islice 
 import torch.nn.functional as F
 import torch.nn.utils as nn_utils
-from .transitions import TransitionReplayer
+from .replay import TransitionReplayer
 
 class Learner():
     r"""Base class for all learners.

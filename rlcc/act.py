@@ -12,6 +12,7 @@ class Actor():
         """Returns actions for given state as numpy array."""
         raise NotImplementedError
 
+
 class NetworkActor(Actor):
     """Implements Deterministic Policy Gradient.
     """
@@ -34,18 +35,29 @@ class NoisyActor(Actor):
     """Implements a noisy actor policy.
     """
 
-    def __init__(self, base_actor, noise_process, action_min=-1, action_max=1):
+    def __init__(self, base_actor, noise_process):
         super(NoisyActor, self).__init__()
         self.base_actor = base_actor
         self.noise_process = noise_process
+ 
+    def act(self, state):
+        """Returns actions for given state as numpy array."""
+        return self.base_actor.act(state) + self.noise_process.sample()
+    
+class ClippingActor(Actor):
+    """Implements an actor policy that clips the actions.
+    """
+
+    def __init__(self, base_actor, action_min=-1, action_max=1):
+        super(ClippingActor, self).__init__()
+        self.base_actor = base_actor
         self.action_min = action_min
         self.action_max = action_max
  
     def act(self, state):
         """Returns actions for given state as numpy array."""
-        action = self.base_actor.act(state) + self.noise_process.sample()
-        return np.clip(action, self.action_min, self.action_max)
-    
+        return np.clip(self.base_actor.act(state), self.action_min, self.action_max)
+
 class StackedActor(Actor):
     def __init__(self, actors):
         super(StackedActor, self).__init__()
