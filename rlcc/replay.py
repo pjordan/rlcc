@@ -1,63 +1,11 @@
-"""Transition-related functions"""
+r"""Transition-related functions"""
 
-from collections import deque, namedtuple
+
 import random
 import numpy as np
 import torch
-from torch.utils.data.dataloader import DataLoader
+from . import transition
 
-Transition = namedtuple(
-    "Transition",
-    field_names=["state", "action", "reward", "next_state", "is_terminal"])
-
-def _make_tensor(x):
-    return torch.tensor(x, dtype=torch.float)
-
-def transition(*args):
-    r"""Creates a transition object from arguments.
-
-    Arguments:
-        state (tensor): The state the transition is from.
-        action (tensor): The action taken in the transition.
-        reward (tensor): The reward for transitioning.
-        next_state (tensor): The state the transition is to.
-        is_terminal (tensor): If terminal then 1.0, 0.0 otherwise.
-    """
-    return Transition(*args)
-
-
-def to_device(trans, device):
-    return transition(*map(lambda x: x.to(device), trans))
-
-
-def make(*args):
-    r"""Creates a transition object from non-tensor arguments.
-
-    Arguments:
-        state (numpy array): The state the transition is from.
-        action (numpy array): The action taken in the transition.
-        reward (numpy array): The reward for transitioning.
-        next_state (numpy array): The state the transition is to.
-        is_terminal (numpy array): If terminal then 1.0, 0.0 otherwise.
-    """
-    return transition(*map(_make_tensor, args))
-
-
-def star_make(tuple_of_args):
-    r"""Creates a transition object from non-tensor arguments.
-
-    Arguments:
-        tuple_of_args (tuple): non-tensor tuple of (s,a,r,s',is_term)
-    """
-    return make(*tuple_of_args)
-
-def buffer(buffer_size=int(1e5)):
-    r"""Creates a buffer.
-
-    Arguments:
-        buffer_size (int): the buffer size.
-    """
-    return deque(maxlen=buffer_size)
 
 def default_collate(transitions):
     r"""Creates a collated transition object from a list of
@@ -101,8 +49,7 @@ class TransitionReplayer(object):
     Arguments:
         transitions: dataset from which to replay the transitions.
         device (string, optional): the device to send the transition data to
-        batch_size (int, optional): how many samples per batch to load
-            (default: 1).
+        batch_size (int, optional): how many samples per batch to load (default: 1).
         collate_fn (callable, optional): merges a list of samples to form a mini-batch.
     """
 

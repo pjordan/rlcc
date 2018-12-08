@@ -1,0 +1,166 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>rlcc &#8212; rlcc  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for rlcc</h1><div class="highlight"><pre>
+<span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">RL Common Components</span>
+
+<span class="sd">The rlcc package contains data structures and algorithms for common components </span>
+<span class="sd">of reinforcement learning.  </span>
+
+<span class="sd">The package uses pytorch for underlying tensor operations.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="n">__author__</span>       <span class="o">=</span> <span class="s1">&#39;Patrick R. Jordan&#39;</span>
+<span class="n">__email__</span>        <span class="o">=</span> <span class="s1">&#39;patrick.r.jordan@gmail.com&#39;</span>
+<span class="n">__version__</span>      <span class="o">=</span> <span class="s1">&#39;0.1.3&#39;</span>
+<span class="n">__url__</span>          <span class="o">=</span> <span class="s1">&#39;https://github.com/pjordan/rlcc/&#39;</span><span class="p">,</span>
+<span class="n">__description__</span>  <span class="o">=</span> <span class="s1">&#39;RL Common Components&#39;</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;transition&#39;</span><span class="p">,</span> <span class="s1">&#39;tensor&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;Transition&#39;</span>
+<span class="p">]</span>
+
+<span class="c1"># Import the basic transition operations</span>
+<span class="n">Transition</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span>
+    <span class="s2">&quot;Transition&quot;</span><span class="p">,</span>
+    <span class="n">field_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;state&quot;</span><span class="p">,</span> <span class="s2">&quot;action&quot;</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">,</span> <span class="s2">&quot;next_state&quot;</span><span class="p">,</span> <span class="s2">&quot;is_terminal&quot;</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="transition"><a class="viewcode-back" href="../index.html#rlcc.transition">[docs]</a><span class="k">def</span> <span class="nf">transition</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Creates a transition object from arguments.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        state (tensor): The state the transition is from.</span>
+<span class="sd">        action (tensor): The action taken in the transition.</span>
+<span class="sd">        reward (tensor): The reward for transitioning.</span>
+<span class="sd">        next_state (tensor): The state the transition is to.</span>
+<span class="sd">        is_terminal (tensor): If terminal then 1.0, 0.0 otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Transition</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+
+<span class="c1"># Define standard tensor operations</span>
+<div class="viewcode-block" id="tensor"><a class="viewcode-back" href="../index.html#rlcc.tensor">[docs]</a><span class="k">def</span> <span class="nf">tensor</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructs a torch `tensor` with data that returns</span>
+<span class="sd">    a tensor of float data type.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        data (array_like) – Initial data for the tensor. </span>
+<span class="sd">        Can be a list, tuple, NumPy ndarray, scalar, and other types.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">to_device</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Creates a transition object from non-tensor arguments.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        state (numpy array): The state the transition is from.</span>
+<span class="sd">        action (numpy array): The action taken in the transition.</span>
+<span class="sd">        reward (numpy array): The reward for transitioning.</span>
+<span class="sd">        next_state (numpy array): The state the transition is to.</span>
+<span class="sd">        is_terminal (numpy array): If terminal then 1.0, 0.0 otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span> <span class="n">iterable</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">rlcc</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Patrick R. Jordan.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

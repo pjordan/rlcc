@@ -1,4 +1,4 @@
-from . import transitions
+
 
 class Observer():
     r"""Base class for all learners.

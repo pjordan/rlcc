@@ -5,6 +5,10 @@ class Schedule():
     def __init__(self):
         pass
 
+    def reset(self):
+        r"""Resets the schedule."""
+        raise NotImplementedError
+
     def update(self):
         r"""Updates the schedule."""
         raise NotImplementedError
@@ -18,8 +22,13 @@ class LinearSchedule(Schedule):
     
     def __init__(self, initial, delta):
         super(LinearSchedule, self).__init__()
+        self.initial = initial
         self.current = initial
         self.delta = delta
+
+    def reset(self):
+        r"""Resets the schedule."""
+        self.current = self.initial
 
     def update(self):
         r"""Updates the schedule."""
@@ -34,9 +43,14 @@ class ExponentialSchedule(Schedule):
     
     def __init__(self, initial, decay):
         super(ExponentialSchedule, self).__init__()
+        self.initial = initial
         self.current = initial
         self.decay = decay
 
+    def reset(self):
+        r"""Resets the schedule."""
+        self.current = self.initial
+    
     def update(self):
         r"""Updates the schedule."""
         self.current *= self.decay
