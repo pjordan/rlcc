@@ -3,14 +3,20 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to rlcc's documentation!
-================================
+.. include:: welcome.rst
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 1
+   :caption: Package Reference
 
-
+   rlcc
+   act
+   learn
+   noise
+   observe
+   replay
+   schedule
+   storage
 
 Indices and tables
 ==================
@@ -19,26 +25,4 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-.. automodule:: rlcc
-     :members:
 
-.. automodule:: rlcc.act
-     :members:
-
-.. automodule:: rlcc.learn
-     :members:
-
-.. automodule:: rlcc.noise
-     :members:
-
-.. automodule:: rlcc.observe
-     :members:
-
-.. automodule:: rlcc.replay
-     :members:
-
-.. automodule:: rlcc.schedule
-     :members:
-
-.. automodule:: rlcc.storage
-     :members:

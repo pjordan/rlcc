@@ -76,8 +76,18 @@
               
             
             
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../rlcc.html">rlcc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../act.html">rlcc.act</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../learn.html">rlcc.learn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../noise.html">rlcc.noise</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../observe.html">rlcc.observe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../replay.html">rlcc.replay</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../schedule.html">rlcc.schedule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../storage.html">rlcc.storage</a></li>
+</ul>
+
             
           
         </div>
@@ -141,26 +151,26 @@
            <div itemprop="articleBody">
             
   <h1>Source code for rlcc.schedule</h1><div class="highlight"><pre>
-<div class="viewcode-block" id="Schedule"><a class="viewcode-back" href="../../index.html#rlcc.schedule.Schedule">[docs]</a><span></span><span class="k">class</span> <span class="nc">Schedule</span><span class="p">():</span>
+<div class="viewcode-block" id="Schedule"><a class="viewcode-back" href="../../schedule.html#rlcc.schedule.Schedule">[docs]</a><span></span><span class="k">class</span> <span class="nc">Schedule</span><span class="p">():</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Base class for all schedules.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
 
-<div class="viewcode-block" id="Schedule.reset"><a class="viewcode-back" href="../../index.html#rlcc.schedule.Schedule.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Schedule.reset"><a class="viewcode-back" href="../../schedule.html#rlcc.schedule.Schedule.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Resets the schedule.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="Schedule.update"><a class="viewcode-back" href="../../index.html#rlcc.schedule.Schedule.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Schedule.update"><a class="viewcode-back" href="../../schedule.html#rlcc.schedule.Schedule.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Updates the schedule.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
         
-<div class="viewcode-block" id="Schedule.value"><a class="viewcode-back" href="../../index.html#rlcc.schedule.Schedule.value">[docs]</a>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Schedule.value"><a class="viewcode-back" href="../../schedule.html#rlcc.schedule.Schedule.value">[docs]</a>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Get the value.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
         
-<div class="viewcode-block" id="LinearSchedule"><a class="viewcode-back" href="../../index.html#rlcc.schedule.LinearSchedule">[docs]</a><span class="k">class</span> <span class="nc">LinearSchedule</span><span class="p">(</span><span class="n">Schedule</span><span class="p">):</span>
+<div class="viewcode-block" id="LinearSchedule"><a class="viewcode-back" href="../../schedule.html#rlcc.schedule.LinearSchedule">[docs]</a><span class="k">class</span> <span class="nc">LinearSchedule</span><span class="p">(</span><span class="n">Schedule</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Linearly updating schedule&quot;&quot;&quot;</span>
     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial</span><span class="p">,</span> <span class="n">delta</span><span class="p">):</span>
@@ -169,19 +179,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="n">initial</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span>
 
-<div class="viewcode-block" id="LinearSchedule.reset"><a class="viewcode-back" href="../../index.html#rlcc.schedule.LinearSchedule.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LinearSchedule.reset"><a class="viewcode-back" href="../../schedule.html#rlcc.schedule.LinearSchedule.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Resets the schedule.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial</span></div>
 
-<div class="viewcode-block" id="LinearSchedule.update"><a class="viewcode-back" href="../../index.html#rlcc.schedule.LinearSchedule.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LinearSchedule.update"><a class="viewcode-back" href="../../schedule.html#rlcc.schedule.LinearSchedule.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Updates the schedule.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta</span></div>
         
-<div class="viewcode-block" id="LinearSchedule.value"><a class="viewcode-back" href="../../index.html#rlcc.schedule.LinearSchedule.value">[docs]</a>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LinearSchedule.value"><a class="viewcode-back" href="../../schedule.html#rlcc.schedule.LinearSchedule.value">[docs]</a>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Get the value.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span></div></div>
     
-<div class="viewcode-block" id="ExponentialSchedule"><a class="viewcode-back" href="../../index.html#rlcc.schedule.ExponentialSchedule">[docs]</a><span class="k">class</span> <span class="nc">ExponentialSchedule</span><span class="p">(</span><span class="n">Schedule</span><span class="p">):</span>
+<div class="viewcode-block" id="ExponentialSchedule"><a class="viewcode-back" href="../../schedule.html#rlcc.schedule.ExponentialSchedule">[docs]</a><span class="k">class</span> <span class="nc">ExponentialSchedule</span><span class="p">(</span><span class="n">Schedule</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Linearly updating schedule&quot;&quot;&quot;</span>
     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial</span><span class="p">,</span> <span class="n">decay</span><span class="p">):</span>
@@ -190,19 +200,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="n">initial</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">decay</span> <span class="o">=</span> <span class="n">decay</span>
 
-<div class="viewcode-block" id="ExponentialSchedule.reset"><a class="viewcode-back" href="../../index.html#rlcc.schedule.ExponentialSchedule.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ExponentialSchedule.reset"><a class="viewcode-back" href="../../schedule.html#rlcc.schedule.ExponentialSchedule.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Resets the schedule.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial</span></div>
     
-<div class="viewcode-block" id="ExponentialSchedule.update"><a class="viewcode-back" href="../../index.html#rlcc.schedule.ExponentialSchedule.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ExponentialSchedule.update"><a class="viewcode-back" href="../../schedule.html#rlcc.schedule.ExponentialSchedule.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Updates the schedule.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decay</span></div>
         
-<div class="viewcode-block" id="ExponentialSchedule.value"><a class="viewcode-back" href="../../index.html#rlcc.schedule.ExponentialSchedule.value">[docs]</a>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ExponentialSchedule.value"><a class="viewcode-back" href="../../schedule.html#rlcc.schedule.ExponentialSchedule.value">[docs]</a>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Get the value.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span></div></div>
     
-<div class="viewcode-block" id="BoundedSchedule"><a class="viewcode-back" href="../../index.html#rlcc.schedule.BoundedSchedule">[docs]</a><span class="k">class</span> <span class="nc">BoundedSchedule</span><span class="p">(</span><span class="n">Schedule</span><span class="p">):</span>
+<div class="viewcode-block" id="BoundedSchedule"><a class="viewcode-back" href="../../schedule.html#rlcc.schedule.BoundedSchedule">[docs]</a><span class="k">class</span> <span class="nc">BoundedSchedule</span><span class="p">(</span><span class="n">Schedule</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Linearly updating schedule&quot;&quot;&quot;</span>
     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schedule</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -211,11 +221,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">min</span> <span class="o">=</span> <span class="nb">min</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max</span> <span class="o">=</span> <span class="nb">max</span>
 
-<div class="viewcode-block" id="BoundedSchedule.update"><a class="viewcode-back" href="../../index.html#rlcc.schedule.BoundedSchedule.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BoundedSchedule.update"><a class="viewcode-back" href="../../schedule.html#rlcc.schedule.BoundedSchedule.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Updates the schedule.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
         
-<div class="viewcode-block" id="BoundedSchedule.value"><a class="viewcode-back" href="../../index.html#rlcc.schedule.BoundedSchedule.value">[docs]</a>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BoundedSchedule.value"><a class="viewcode-back" href="../../schedule.html#rlcc.schedule.BoundedSchedule.value">[docs]</a>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Get the value.&quot;&quot;&quot;</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">min</span><span class="p">:</span>

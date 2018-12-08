@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rlcc.learn &mdash; rlcc  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="rlcc.noise" href="noise.html" />
+    <link rel="prev" title="rlcc.act" href="act.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> rlcc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="rlcc.html">rlcc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="act.html">rlcc.act</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">rlcc.learn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="noise.html">rlcc.noise</a></li>
+<li class="toctree-l1"><a class="reference internal" href="observe.html">rlcc.observe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replay.html">rlcc.replay</a></li>
+<li class="toctree-l1"><a class="reference internal" href="schedule.html">rlcc.schedule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="storage.html">rlcc.storage</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">rlcc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>rlcc.learn</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/learn.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-rlcc.learn">
+<span id="rlcc-learn"></span><h1>rlcc.learn<a class="headerlink" href="#module-rlcc.learn" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="rlcc.learn.DPG">
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">DPG</code><span class="sig-paren">(</span><em>actor_triad</em>, <em>critic_triad</em>, <em>device</em>, <em>gamma=0.99</em>, <em>tau=0.001</em>, <em>writer=None</em>, <em>write_frequency=1</em>, <em>write_prefix=''</em>, <em>actor_norm_clip=None</em>, <em>critic_norm_clip=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DPG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DPG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements Deterministic Policy Gradient.</p>
+<dl class="method">
+<dt id="rlcc.learn.DPG.step">
+<code class="descname">step</code><span class="sig-paren">(</span><em>transitions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DPG.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DPG.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a single learning step.</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>transitions (list of Transition): transitions</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.learn.Learner">
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">Learner</code><a class="reference internal" href="_modules/rlcc/learn.html#Learner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.Learner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all learners.</p>
+<dl class="method">
+<dt id="rlcc.learn.Learner.learn">
+<code class="descname">learn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#Learner.learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.Learner.learn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a single learning step.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.learn.LearningStrategy">
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">LearningStrategy</code><a class="reference internal" href="_modules/rlcc/learn.html#LearningStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.LearningStrategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all learning strategies.</p>
+<dl class="method">
+<dt id="rlcc.learn.LearningStrategy.step">
+<code class="descname">step</code><span class="sig-paren">(</span><em>transitions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#LearningStrategy.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.LearningStrategy.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a single learning step.</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>transitions (list of Transition): transitions</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.learn.ReplayLearner">
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">ReplayLearner</code><span class="sig-paren">(</span><em>learning_strategy</em>, <em>transitions</em>, <em>device=None</em>, <em>batch_size=128</em>, <em>batches_per_step=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#ReplayLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.ReplayLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements a learner using a replay buffer.</p>
+<dl class="method">
+<dt id="rlcc.learn.ReplayLearner.learn">
+<code class="descname">learn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#ReplayLearner.learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.ReplayLearner.learn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a single learning step.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.learn.StackedLearner">
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">StackedLearner</code><span class="sig-paren">(</span><em>learners</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#StackedLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.StackedLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements a learner that delegates to other learners.</p>
+<dl class="method">
+<dt id="rlcc.learn.StackedLearner.learn">
+<code class="descname">learn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#StackedLearner.learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.StackedLearner.learn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a single learning step.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="noise.html" class="btn btn-neutral float-right" title="rlcc.noise" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="act.html" class="btn btn-neutral" title="rlcc.act" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Patrick R. Jordan
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

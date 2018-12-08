@@ -1,0 +1,307 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rlcc.schedule &mdash; rlcc  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="rlcc.storage" href="storage.html" />
+    <link rel="prev" title="rlcc.replay" href="replay.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> rlcc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="rlcc.html">rlcc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="act.html">rlcc.act</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learn.html">rlcc.learn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="noise.html">rlcc.noise</a></li>
+<li class="toctree-l1"><a class="reference internal" href="observe.html">rlcc.observe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replay.html">rlcc.replay</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">rlcc.schedule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="storage.html">rlcc.storage</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">rlcc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>rlcc.schedule</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/schedule.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-rlcc.schedule">
+<span id="rlcc-schedule"></span><h1>rlcc.schedule<a class="headerlink" href="#module-rlcc.schedule" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="rlcc.schedule.BoundedSchedule">
+<em class="property">class </em><code class="descclassname">rlcc.schedule.</code><code class="descname">BoundedSchedule</code><span class="sig-paren">(</span><em>schedule</em>, <em>min=None</em>, <em>max=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#BoundedSchedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.BoundedSchedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linearly updating schedule</p>
+<dl class="method">
+<dt id="rlcc.schedule.BoundedSchedule.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#BoundedSchedule.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.BoundedSchedule.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the schedule.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.schedule.BoundedSchedule.value">
+<code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#BoundedSchedule.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.BoundedSchedule.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.schedule.ExponentialSchedule">
+<em class="property">class </em><code class="descclassname">rlcc.schedule.</code><code class="descname">ExponentialSchedule</code><span class="sig-paren">(</span><em>initial</em>, <em>decay</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#ExponentialSchedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.ExponentialSchedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linearly updating schedule</p>
+<dl class="method">
+<dt id="rlcc.schedule.ExponentialSchedule.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#ExponentialSchedule.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.ExponentialSchedule.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the schedule.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.schedule.ExponentialSchedule.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#ExponentialSchedule.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.ExponentialSchedule.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the schedule.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.schedule.ExponentialSchedule.value">
+<code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#ExponentialSchedule.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.ExponentialSchedule.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.schedule.LinearSchedule">
+<em class="property">class </em><code class="descclassname">rlcc.schedule.</code><code class="descname">LinearSchedule</code><span class="sig-paren">(</span><em>initial</em>, <em>delta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#LinearSchedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.LinearSchedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linearly updating schedule</p>
+<dl class="method">
+<dt id="rlcc.schedule.LinearSchedule.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#LinearSchedule.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.LinearSchedule.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the schedule.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.schedule.LinearSchedule.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#LinearSchedule.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.LinearSchedule.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the schedule.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.schedule.LinearSchedule.value">
+<code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#LinearSchedule.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.LinearSchedule.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.schedule.Schedule">
+<em class="property">class </em><code class="descclassname">rlcc.schedule.</code><code class="descname">Schedule</code><a class="reference internal" href="_modules/rlcc/schedule.html#Schedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.Schedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all schedules.</p>
+<dl class="method">
+<dt id="rlcc.schedule.Schedule.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#Schedule.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.Schedule.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the schedule.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.schedule.Schedule.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#Schedule.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.Schedule.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the schedule.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.schedule.Schedule.value">
+<code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/schedule.html#Schedule.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.schedule.Schedule.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="storage.html" class="btn btn-neutral float-right" title="rlcc.storage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="replay.html" class="btn btn-neutral" title="rlcc.replay" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Patrick R. Jordan
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

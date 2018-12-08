@@ -76,8 +76,18 @@
               
             
             
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../rlcc.html">rlcc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../act.html">rlcc.act</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../learn.html">rlcc.learn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../noise.html">rlcc.noise</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../observe.html">rlcc.observe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../replay.html">rlcc.replay</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../schedule.html">rlcc.schedule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../storage.html">rlcc.storage</a></li>
+</ul>
+
             
           
         </div>
@@ -146,18 +156,18 @@
 <span class="kn">import</span> <span class="nn">torch.nn.utils</span> <span class="k">as</span> <span class="nn">nn_utils</span>
 <span class="kn">from</span> <span class="nn">.replay</span> <span class="k">import</span> <span class="n">TransitionReplayer</span>
 
-<div class="viewcode-block" id="Learner"><a class="viewcode-back" href="../../index.html#rlcc.learn.Learner">[docs]</a><span class="k">class</span> <span class="nc">Learner</span><span class="p">():</span>
+<div class="viewcode-block" id="Learner"><a class="viewcode-back" href="../../learn.html#rlcc.learn.Learner">[docs]</a><span class="k">class</span> <span class="nc">Learner</span><span class="p">():</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Base class for all learners.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
 
-<div class="viewcode-block" id="Learner.learn"><a class="viewcode-back" href="../../index.html#rlcc.learn.Learner.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Learner.learn"><a class="viewcode-back" href="../../learn.html#rlcc.learn.Learner.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Performs a single learning step.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
 
-<div class="viewcode-block" id="StackedLearner"><a class="viewcode-back" href="../../index.html#rlcc.learn.StackedLearner">[docs]</a><span class="k">class</span> <span class="nc">StackedLearner</span><span class="p">(</span><span class="n">Learner</span><span class="p">):</span>
+<div class="viewcode-block" id="StackedLearner"><a class="viewcode-back" href="../../learn.html#rlcc.learn.StackedLearner">[docs]</a><span class="k">class</span> <span class="nc">StackedLearner</span><span class="p">(</span><span class="n">Learner</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Implements a learner that delegates to other learners.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -165,12 +175,12 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">StackedLearner</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">learners</span> <span class="o">=</span> <span class="n">learners</span>
         
-<div class="viewcode-block" id="StackedLearner.learn"><a class="viewcode-back" href="../../index.html#rlcc.learn.StackedLearner.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="StackedLearner.learn"><a class="viewcode-back" href="../../learn.html#rlcc.learn.StackedLearner.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Performs a single learning step.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">learner</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">learners</span><span class="p">:</span>
             <span class="n">learner</span><span class="o">.</span><span class="n">learn</span><span class="p">()</span></div></div>
 
-<div class="viewcode-block" id="ReplayLearner"><a class="viewcode-back" href="../../index.html#rlcc.learn.ReplayLearner">[docs]</a><span class="k">class</span> <span class="nc">ReplayLearner</span><span class="p">(</span><span class="n">Learner</span><span class="p">):</span>
+<div class="viewcode-block" id="ReplayLearner"><a class="viewcode-back" href="../../learn.html#rlcc.learn.ReplayLearner">[docs]</a><span class="k">class</span> <span class="nc">ReplayLearner</span><span class="p">(</span><span class="n">Learner</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Implements a learner using a replay buffer.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -181,20 +191,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">batches_per_step</span> <span class="o">=</span> <span class="n">batches_per_step</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">replayer</span> <span class="o">=</span> <span class="n">TransitionReplayer</span><span class="p">(</span><span class="n">transitions</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ReplayLearner.learn"><a class="viewcode-back" href="../../index.html#rlcc.learn.ReplayLearner.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ReplayLearner.learn"><a class="viewcode-back" href="../../learn.html#rlcc.learn.ReplayLearner.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Performs a single learning step.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">replayer</span><span class="p">)</span><span class="o">&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">islice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">replayer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">batches_per_step</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">learning_strategy</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span></div></div>
 
-<div class="viewcode-block" id="LearningStrategy"><a class="viewcode-back" href="../../index.html#rlcc.learn.LearningStrategy">[docs]</a><span class="k">class</span> <span class="nc">LearningStrategy</span><span class="p">():</span>
+<div class="viewcode-block" id="LearningStrategy"><a class="viewcode-back" href="../../learn.html#rlcc.learn.LearningStrategy">[docs]</a><span class="k">class</span> <span class="nc">LearningStrategy</span><span class="p">():</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Base class for all learning strategies.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
 
-<div class="viewcode-block" id="LearningStrategy.step"><a class="viewcode-back" href="../../index.html#rlcc.learn.LearningStrategy.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transitions</span><span class="p">):</span>
+<div class="viewcode-block" id="LearningStrategy.step"><a class="viewcode-back" href="../../learn.html#rlcc.learn.LearningStrategy.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transitions</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Performs a single learning step.</span>
 
 <span class="sd">        Arguments:</span>
@@ -203,7 +213,7 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
 
 
-<div class="viewcode-block" id="DPG"><a class="viewcode-back" href="../../index.html#rlcc.learn.DPG">[docs]</a><span class="k">class</span> <span class="nc">DPG</span><span class="p">(</span><span class="n">LearningStrategy</span><span class="p">):</span>
+<div class="viewcode-block" id="DPG"><a class="viewcode-back" href="../../learn.html#rlcc.learn.DPG">[docs]</a><span class="k">class</span> <span class="nc">DPG</span><span class="p">(</span><span class="n">LearningStrategy</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Implements Deterministic Policy Gradient.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -222,7 +232,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">actor_norm_clip</span> <span class="o">=</span> <span class="n">actor_norm_clip</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">critic_norm_clip</span> <span class="o">=</span> <span class="n">critic_norm_clip</span>
 
-<div class="viewcode-block" id="DPG.step"><a class="viewcode-back" href="../../index.html#rlcc.learn.DPG.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transitions</span><span class="p">):</span>
+<div class="viewcode-block" id="DPG.step"><a class="viewcode-back" href="../../learn.html#rlcc.learn.DPG.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transitions</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Performs a single learning step.</span>
 
 <span class="sd">        Arguments:</span>
