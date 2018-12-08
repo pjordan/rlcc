@@ -1,8 +1,3 @@
-# rlcc
-Reinforcement learning common components
-
-Documentation at http://pjordan.github.io/rlcc/.
-
 --------------------------------------------------------------------------------
 
 rlcc is a Python package provides common components for reinforcement learning.  
