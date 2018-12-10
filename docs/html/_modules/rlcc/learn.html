@@ -81,6 +81,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../rlcc.html">rlcc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../act.html">rlcc.act</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../learn.html">rlcc.learn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../model.html">rlcc.model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../noise.html">rlcc.noise</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../observe.html">rlcc.observe</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../replay.html">rlcc.replay</a></li>
@@ -151,16 +152,22 @@
            <div itemprop="articleBody">
             
   <h1>Source code for rlcc.learn</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">islice</span> 
+<span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Learning and related functionality.&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">islice</span> 
 <span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
 <span class="kn">import</span> <span class="nn">torch.nn.utils</span> <span class="k">as</span> <span class="nn">nn_utils</span>
 <span class="kn">from</span> <span class="nn">.replay</span> <span class="k">import</span> <span class="n">TransitionReplayer</span>
+<span class="kn">from</span> <span class="nn">.model</span> <span class="k">import</span> <span class="n">soft_update</span>
 
 <div class="viewcode-block" id="Learner"><a class="viewcode-back" href="../../learn.html#rlcc.learn.Learner">[docs]</a><span class="k">class</span> <span class="nc">Learner</span><span class="p">():</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Base class for all learners.</span>
+<span class="sd">    </span>
+<span class="sd">    Your learners should also subclass this class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
 <div class="viewcode-block" id="Learner.learn"><a class="viewcode-back" href="../../learn.html#rlcc.learn.Learner.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -168,10 +175,13 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
 
 <div class="viewcode-block" id="StackedLearner"><a class="viewcode-back" href="../../learn.html#rlcc.learn.StackedLearner">[docs]</a><span class="k">class</span> <span class="nc">StackedLearner</span><span class="p">(</span><span class="n">Learner</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Implements a learner that delegates to other learners.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Implements a learner that delegates to other learners.</span>
 
+<span class="sd">    :param learners: list of learners</span>
+<span class="sd">    :type learners: list of :class:`rlcc.learn.Learner`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learners</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">StackedLearner</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">learners</span> <span class="o">=</span> <span class="n">learners</span>
         
@@ -181,15 +191,26 @@
             <span class="n">learner</span><span class="o">.</span><span class="n">learn</span><span class="p">()</span></div></div>
 
 <div class="viewcode-block" id="ReplayLearner"><a class="viewcode-back" href="../../learn.html#rlcc.learn.ReplayLearner">[docs]</a><span class="k">class</span> <span class="nc">ReplayLearner</span><span class="p">(</span><span class="n">Learner</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Implements a learner using a replay buffer.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Implements a learner using a replay buffer.</span>
+<span class="sd">    </span>
+<span class="sd">    :param learning_strategy: delegate learning strategy</span>
+<span class="sd">    :type learning_strategy: :class:`rlcc.learn.LearningStrategy`</span>
+<span class="sd">    :param transitions: list of transitions</span>
+<span class="sd">    :type transitions: list of :class:`rlcc.Transition`</span>
+<span class="sd">    :param device: the torch device</span>
+<span class="sd">    :type device: str, optional</span>
+<span class="sd">    :param batch_size: the batch size</span>
+<span class="sd">    :type batch_size: int, optional</span>
+<span class="sd">    :param batches_per_step: the number of batches per step</span>
+<span class="sd">    :type batches_per_step: int, optional</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learning_strategy</span><span class="p">,</span> <span class="n">transitions</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">batches_per_step</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learning_strategy</span><span class="p">,</span> <span class="n">transitions</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">batches_per_step</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ReplayLearner</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">learning_strategy</span> <span class="o">=</span> <span class="n">learning_strategy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batches_per_step</span> <span class="o">=</span> <span class="n">batches_per_step</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">replayer</span> <span class="o">=</span> <span class="n">TransitionReplayer</span><span class="p">(</span><span class="n">transitions</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">replayer</span> <span class="o">=</span> <span class="n">TransitionReplayer</span><span class="p">(</span><span class="n">transitions</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ReplayLearner.learn"><a class="viewcode-back" href="../../learn.html#rlcc.learn.ReplayLearner.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Performs a single learning step.&quot;&quot;&quot;</span>
@@ -199,96 +220,243 @@
 
 <div class="viewcode-block" id="LearningStrategy"><a class="viewcode-back" href="../../learn.html#rlcc.learn.LearningStrategy">[docs]</a><span class="k">class</span> <span class="nc">LearningStrategy</span><span class="p">():</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Base class for all learning strategies.</span>
+
+<span class="sd">    Your learning strategies should also subclass this class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
 <div class="viewcode-block" id="LearningStrategy.step"><a class="viewcode-back" href="../../learn.html#rlcc.learn.LearningStrategy.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transitions</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Performs a single learning step.</span>
 
-<span class="sd">        Arguments:</span>
-<span class="sd">            transitions (list of Transition): transitions</span>
+<span class="sd">        :param transitions: a list of :class:`rlcc.Transition`</span>
+<span class="sd">        :type transitions: :class:`rlcc.Transition`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
 
 
-<div class="viewcode-block" id="DPG"><a class="viewcode-back" href="../../learn.html#rlcc.learn.DPG">[docs]</a><span class="k">class</span> <span class="nc">DPG</span><span class="p">(</span><span class="n">LearningStrategy</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Implements Deterministic Policy Gradient.</span>
+<div class="viewcode-block" id="StackedLearningStrategy"><a class="viewcode-back" href="../../learn.html#rlcc.learn.StackedLearningStrategy">[docs]</a><span class="k">class</span> <span class="nc">StackedLearningStrategy</span><span class="p">(</span><span class="n">LearningStrategy</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Implements stacked learning strategy</span>
+
+<span class="sd">    :param strategies: list of learning strategies</span>
+<span class="sd">    :type strategies: list of :class:`rlcc.learn.LearningStrategy`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strategies</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">StackedLearningStrategy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strategies</span> <span class="o">=</span> <span class="n">strategies</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actor_triad</span><span class="p">,</span> <span class="n">critic_triad</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span>
-                 <span class="n">gamma</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">write_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">write_prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
-                 <span class="n">actor_norm_clip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">critic_norm_clip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">DPG</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="n">tau</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">actor_triad</span> <span class="o">=</span> <span class="n">actor_triad</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">critic_triad</span> <span class="o">=</span> <span class="n">critic_triad</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">writer</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">learning_steps</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_frequency</span> <span class="o">=</span> <span class="n">write_frequency</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_prefix</span> <span class="o">=</span> <span class="n">write_prefix</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">actor_norm_clip</span> <span class="o">=</span> <span class="n">actor_norm_clip</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">critic_norm_clip</span> <span class="o">=</span> <span class="n">critic_norm_clip</span>
-
-<div class="viewcode-block" id="DPG.step"><a class="viewcode-back" href="../../learn.html#rlcc.learn.DPG.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transitions</span><span class="p">):</span>
+<div class="viewcode-block" id="StackedLearningStrategy.step"><a class="viewcode-back" href="../../learn.html#rlcc.learn.StackedLearningStrategy.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transitions</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Performs a single learning step.</span>
 
-<span class="sd">        Arguments:</span>
-<span class="sd">            transitions (list of Transition): transitions</span>
+<span class="sd">        :param transitions: a list of :class:`rlcc.Transition`</span>
+<span class="sd">        :type transitions: :class:`rlcc.Transition`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">strategy</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategies</span><span class="p">:</span>
+            <span class="n">strategy</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">transitions</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="NetworkedLearningObserver"><a class="viewcode-back" href="../../learn.html#rlcc.learn.NetworkedLearningObserver">[docs]</a><span class="k">class</span> <span class="nc">NetworkedLearningObserver</span><span class="p">():</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Base class for networked learning observers.</span>
+
+<span class="sd">    Your learning observers should also subclass this class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+    
+    <span class="k">def</span> <span class="nf">observe_learning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">network</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">learning_step</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="DoubleLearningStrategy"><a class="viewcode-back" href="../../learn.html#rlcc.learn.DoubleLearningStrategy">[docs]</a><span class="k">class</span> <span class="nc">DoubleLearningStrategy</span><span class="p">(</span><span class="n">LearningStrategy</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Implements a double learning strategy.</span>
+<span class="sd">    </span>
+<span class="sd">    :param local: the local network</span>
+<span class="sd">    :type local: :class:`torch.nn.Module`</span>
+<span class="sd">    :param target: the target network</span>
+<span class="sd">    :type target: :class:`torch.nn.Module`</span>
+<span class="sd">    :param optimizer: the optimizer</span>
+<span class="sd">    :type optimizer: :class:`torch.nn.Module`</span>
+<span class="sd">    :param tau: the update weight</span>
+<span class="sd">    :type tau: float, optional</span>
+<span class="sd">    :param observers: list of observers</span>
+<span class="sd">    :type observers: list of observers, optional</span>
+<span class="sd">    :param clip_norm: the gradient norm maximum</span>
+<span class="sd">    :type clip_norm: float, optional</span>
+<span class="sd">    :param clip_value: the gradient value maximum</span>
+<span class="sd">    :type clip_value: float, optional</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">local</span><span class="p">,</span> 
+                 <span class="n">target</span><span class="p">,</span>
+                 <span class="n">optimizer</span><span class="p">,</span>
+                 <span class="n">tau</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> 
+                 <span class="n">observers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">clip_norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">clip_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DoubleLearningStrategy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="n">tau</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">local</span> <span class="o">=</span> <span class="n">local</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">observers</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">observers</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">observers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clip_norm</span> <span class="o">=</span> <span class="n">clip_norm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clip_value</span> <span class="o">=</span> <span class="n">clip_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learning_steps</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="DoubleLearningStrategy.step"><a class="viewcode-back" href="../../learn.html#rlcc.learn.DoubleLearningStrategy.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transitions</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Performs a single learning step.</span>
+
+<span class="sd">        :param transitions: a list of :class:`rlcc.Transition`</span>
+<span class="sd">        :type transitions: :class:`rlcc.Transition`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Compute actor loss</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">transitions</span><span class="p">)</span>
+        <span class="c1"># Minimize the loss</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="c1"># Clip the gradient</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip_norm</span><span class="p">:</span>
+            <span class="n">nn_utils</span><span class="o">.</span><span class="n">clip_grad_norm_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip_norm</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip_value</span><span class="p">:</span>
+            <span class="n">nn_utils</span><span class="o">.</span><span class="n">clip_grad_value_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip_value</span><span class="p">)</span>
+        <span class="c1"># Optimize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="c1"># Notify the observers</span>
+        <span class="k">for</span> <span class="n">obs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">observers</span><span class="p">:</span>
+            <span class="n">obs</span><span class="o">.</span><span class="n">observe_learning</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_steps</span><span class="p">)</span>
+        <span class="c1"># soft updates</span>
+        <span class="n">soft_update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">local</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">)</span>
+
+        <span class="c1"># update counts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learning_steps</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="DoubleLearningStrategy.loss"><a class="viewcode-back" href="../../learn.html#rlcc.learn.DoubleLearningStrategy.loss">[docs]</a>    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transitions</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the loss of the transitions</span>
+
+<span class="sd">        :param transitions: a list of :class:`rlcc.Transition`</span>
+<span class="sd">        :type transitions: :class:`rlcc.Transition`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+
+
+<div class="viewcode-block" id="DPGActor"><a class="viewcode-back" href="../../learn.html#rlcc.learn.DPGActor">[docs]</a><span class="k">class</span> <span class="nc">DPGActor</span><span class="p">(</span><span class="n">DoubleLearningStrategy</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Implements Deterministic Policy Gradient Actor learner.</span>
+<span class="sd">    </span>
+<span class="sd">    :param actor_local: the local network</span>
+<span class="sd">    :type actor_local: :class:`torch.nn.Module`</span>
+<span class="sd">    :param actor_target: the target network</span>
+<span class="sd">    :type actor_target: :class:`torch.nn.Module`</span>
+<span class="sd">    :param actor_optimizer: the optimizer</span>
+<span class="sd">    :type actor_optimizer: :class:`torch.nn.Module`</span>
+<span class="sd">    :param critic: the critic</span>
+<span class="sd">    :type critic: :class:`torch.nn.Module`</span>
+<span class="sd">    :param tau: the update weight</span>
+<span class="sd">    :type tau: float, optional</span>
+<span class="sd">    :param observers: list of observers</span>
+<span class="sd">    :type observers: list of observers, optional</span>
+<span class="sd">    :param clip_norm: the gradient norm maximum</span>
+<span class="sd">    :type clip_norm: float, optional</span>
+<span class="sd">    :param clip_value: the gradient value maximum</span>
+<span class="sd">    :type clip_value: float, optional</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">actor_local</span><span class="p">,</span>
+                 <span class="n">actor_target</span><span class="p">,</span>
+                 <span class="n">actor_optimizer</span><span class="p">,</span> 
+                 <span class="n">critic</span><span class="p">,</span>
+                 <span class="n">tau</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> 
+                 <span class="n">observers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">clip_norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">clip_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DPGActor</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">actor_local</span><span class="p">,</span> 
+            <span class="n">actor_target</span><span class="p">,</span>
+            <span class="n">actor_optimizer</span><span class="p">,</span>
+            <span class="n">tau</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> 
+            <span class="n">observers</span><span class="o">=</span><span class="n">observers</span><span class="p">,</span>
+            <span class="n">clip_norm</span><span class="o">=</span><span class="n">clip_norm</span><span class="p">,</span>
+            <span class="n">clip_value</span><span class="o">=</span><span class="n">clip_value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic</span> <span class="o">=</span> <span class="n">critic</span>
+
+<div class="viewcode-block" id="DPGActor.loss"><a class="viewcode-back" href="../../learn.html#rlcc.learn.DPGActor.loss">[docs]</a>    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transitions</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the loss of the transitions</span>
+
+<span class="sd">        :param transitions: a list of :class:`rlcc.Transition`</span>
+<span class="sd">        :type transitions: :class:`rlcc.Transition`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Unpack tuples</span>
+        <span class="n">states</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">transitions</span>
+        <span class="k">return</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">local</span><span class="p">(</span><span class="n">states</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="DPGCritic"><a class="viewcode-back" href="../../learn.html#rlcc.learn.DPGCritic">[docs]</a><span class="k">class</span> <span class="nc">DPGCritic</span><span class="p">(</span><span class="n">DoubleLearningStrategy</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Implements Deterministic Policy Gradient Critic learner.</span>
+<span class="sd">    </span>
+<span class="sd">    :param critic_local: the local network</span>
+<span class="sd">    :type critic_local: :class:`torch.nn.Module`</span>
+<span class="sd">    :param critic_target: the target network</span>
+<span class="sd">    :type critic_target: :class:`torch.nn.Module`</span>
+<span class="sd">    :param critic_optimizer: the optimizer</span>
+<span class="sd">    :type critic_optimizer: :class:`torch.nn.Module`</span>
+<span class="sd">    :param actor: the actor</span>
+<span class="sd">    :type actor: :class:`torch.nn.Module`</span>
+<span class="sd">    :param tau: the update weight</span>
+<span class="sd">    :type tau: float, optional</span>
+<span class="sd">    :param observers: list of observers</span>
+<span class="sd">    :type observers: list of observers, optional</span>
+<span class="sd">    :param clip_norm: the gradient norm maximum</span>
+<span class="sd">    :type clip_norm: float, optional</span>
+<span class="sd">    :param clip_value: the gradient value maximum</span>
+<span class="sd">    :type clip_value: float, optional</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">critic_local</span><span class="p">,</span>
+                 <span class="n">critic_target</span><span class="p">,</span>
+                 <span class="n">critic_optimizer</span><span class="p">,</span> 
+                 <span class="n">actor</span><span class="p">,</span>
+                 <span class="n">gamma</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> 
+                 <span class="n">tau</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> 
+                 <span class="n">observers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">clip_norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">clip_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DPGCritic</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">critic_local</span><span class="p">,</span> 
+            <span class="n">critic_target</span><span class="p">,</span>
+            <span class="n">critic_optimizer</span><span class="p">,</span>
+            <span class="n">tau</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> 
+            <span class="n">observers</span><span class="o">=</span><span class="n">observers</span><span class="p">,</span>
+            <span class="n">clip_norm</span><span class="o">=</span><span class="n">clip_norm</span><span class="p">,</span>
+            <span class="n">clip_value</span><span class="o">=</span><span class="n">clip_value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actor</span> <span class="o">=</span> <span class="n">actor</span>
+
+<div class="viewcode-block" id="DPGCritic.step"><a class="viewcode-back" href="../../learn.html#rlcc.learn.DPGCritic.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transitions</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the loss of the transitions</span>
+
+<span class="sd">        :param transitions: a list of :class:`rlcc.Transition`</span>
+<span class="sd">        :type transitions: :class:`rlcc.Transition`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Unpack tuples</span>
         <span class="n">states</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">next_states</span><span class="p">,</span> <span class="n">is_terminals</span> <span class="o">=</span> <span class="n">transitions</span>
-        <span class="n">actor_local</span><span class="p">,</span> <span class="n">actor_target</span><span class="p">,</span> <span class="n">actor_optimizer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor_triad</span>
-        <span class="n">critic_local</span><span class="p">,</span> <span class="n">critic_target</span><span class="p">,</span> <span class="n">critic_optimizer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic_triad</span>
         
         <span class="c1"># Get predicted next-state actions and Q values from target models</span>
-        <span class="n">actions_next</span> <span class="o">=</span> <span class="n">actor_target</span><span class="p">(</span><span class="n">next_states</span><span class="p">)</span>
-        <span class="n">q_targets_next</span> <span class="o">=</span> <span class="n">critic_target</span><span class="p">(</span><span class="n">next_states</span><span class="p">,</span> <span class="n">actions_next</span><span class="p">)</span>
+        <span class="n">actions_next</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="p">(</span><span class="n">next_states</span><span class="p">)</span>
+        <span class="n">q_targets_next</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">(</span><span class="n">next_states</span><span class="p">,</span> <span class="n">actions_next</span><span class="p">)</span>
         
         <span class="c1"># Compute Q targets for current states</span>
         <span class="n">q_targets</span> <span class="o">=</span> <span class="n">rewards</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">q_targets_next</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">is_terminals</span><span class="p">))</span>
         <span class="c1"># Compute critic loss</span>
-        <span class="n">q_expected</span> <span class="o">=</span> <span class="n">critic_local</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">actions</span><span class="p">)</span>
-        <span class="n">critic_loss</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">q_expected</span><span class="p">,</span> <span class="n">q_targets</span><span class="p">)</span>
-        <span class="c1"># Minimize the loss</span>
-        <span class="n">critic_optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-        <span class="n">critic_loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic_norm_clip</span><span class="p">:</span>
-            <span class="n">nn_utils</span><span class="o">.</span><span class="n">clip_grad_norm_</span><span class="p">(</span><span class="n">critic_local</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic_norm_clip</span><span class="p">)</span>
-        <span class="n">critic_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="n">q_expected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">actions</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">q_expected</span><span class="p">,</span> <span class="n">q_targets</span><span class="p">)</span></div></div>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;data/&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">write_prefix</span><span class="o">+</span><span class="s1">&#39;critic_loss&#39;</span><span class="p">,</span><span class="n">critic_loss</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_steps</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_steps</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_frequency</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">np</span><span class="p">:</span> <span class="n">np</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grad</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="n">critic_local</span><span class="o">.</span><span class="n">named_parameters</span><span class="p">()):</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_histogram</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_prefix</span><span class="o">+</span><span class="s2">&quot;critic_local.&quot;</span><span class="o">+</span><span class="n">n</span><span class="o">+</span><span class="s2">&quot;.grad&quot;</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">global_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learning_steps</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_histogram</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_prefix</span><span class="o">+</span><span class="s2">&quot;critic_local.&quot;</span><span class="o">+</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">global_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learning_steps</span><span class="p">)</span>
-                    
-        <span class="c1"># Compute actor loss</span>
-        <span class="n">actions_pred</span> <span class="o">=</span> <span class="n">actor_local</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
-        <span class="n">actor_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">critic_local</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">actions_pred</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-        <span class="c1"># Minimize the loss</span>
-        <span class="n">actor_optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-        <span class="n">actor_loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor_norm_clip</span><span class="p">:</span>
-            <span class="n">nn_utils</span><span class="o">.</span><span class="n">clip_grad_norm_</span><span class="p">(</span><span class="n">actor_local</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor_norm_clip</span><span class="p">)</span>
-        <span class="n">actor_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;data/&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">write_prefix</span><span class="o">+</span><span class="s1">&#39;actor_loss&#39;</span><span class="p">,</span><span class="n">actor_loss</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_steps</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_steps</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_frequency</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">np</span><span class="p">:</span> <span class="n">np</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grad</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="n">actor_local</span><span class="o">.</span><span class="n">named_parameters</span><span class="p">()):</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_histogram</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_prefix</span><span class="o">+</span><span class="s2">&quot;actor_local.&quot;</span><span class="o">+</span><span class="n">n</span><span class="o">+</span><span class="s2">&quot;.grad&quot;</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">global_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learning_steps</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_histogram</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_prefix</span><span class="o">+</span><span class="s2">&quot;actor_local.&quot;</span><span class="o">+</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">global_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learning_steps</span><span class="p">)</span>
-                    
-        <span class="c1"># soft updates</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">critic_triad</span><span class="o">.</span><span class="n">soft_update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">actor_triad</span><span class="o">.</span><span class="n">soft_update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">)</span>
-        
-        <span class="c1"># update counts</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">learning_steps</span> <span class="o">+=</span> <span class="mi">1</span></div></div>
 </pre></div>
 
            </div>

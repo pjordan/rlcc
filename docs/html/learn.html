@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="rlcc.noise" href="noise.html" />
+    <link rel="next" title="rlcc.model" href="model.html" />
     <link rel="prev" title="rlcc.act" href="act.html" /> 
 
   
@@ -83,6 +83,7 @@
 <li class="toctree-l1"><a class="reference internal" href="rlcc.html">rlcc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="act.html">rlcc.act</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">rlcc.learn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">rlcc.model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="noise.html">rlcc.noise</a></li>
 <li class="toctree-l1"><a class="reference internal" href="observe.html">rlcc.observe</a></li>
 <li class="toctree-l1"><a class="reference internal" href="replay.html">rlcc.replay</a></li>
@@ -127,6 +128,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -139,7 +142,10 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/learn.rst.txt" rel="nofollow"> View page source</a>
+            
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/pjordan/rlcc" class="fa fa-github"> Edit on GitHub</a>
+            
           
         
       </li>
@@ -154,18 +160,130 @@
             
   <div class="section" id="module-rlcc.learn">
 <span id="rlcc-learn"></span><h1>rlcc.learn<a class="headerlink" href="#module-rlcc.learn" title="Permalink to this headline">¶</a></h1>
+<p>Learning and related functionality.</p>
 <dl class="class">
-<dt id="rlcc.learn.DPG">
-<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">DPG</code><span class="sig-paren">(</span><em>actor_triad</em>, <em>critic_triad</em>, <em>device</em>, <em>gamma=0.99</em>, <em>tau=0.001</em>, <em>writer=None</em>, <em>write_frequency=1</em>, <em>write_prefix=''</em>, <em>actor_norm_clip=None</em>, <em>critic_norm_clip=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DPG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DPG" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implements Deterministic Policy Gradient.</p>
+<dt id="rlcc.learn.DPGActor">
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">DPGActor</code><span class="sig-paren">(</span><em>actor_local</em>, <em>actor_target</em>, <em>actor_optimizer</em>, <em>critic</em>, <em>tau=0.001</em>, <em>observers=None</em>, <em>clip_norm=None</em>, <em>clip_value=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DPGActor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DPGActor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements Deterministic Policy Gradient Actor learner.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>actor_local</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>) – the local network</li>
+<li><strong>actor_target</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>) – the target network</li>
+<li><strong>actor_optimizer</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>) – the optimizer</li>
+<li><strong>critic</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>) – the critic</li>
+<li><strong>tau</strong> (<em>float</em><em>, </em><em>optional</em>) – the update weight</li>
+<li><strong>observers</strong> (<em>list of observers</em><em>, </em><em>optional</em>) – list of observers</li>
+<li><strong>clip_norm</strong> (<em>float</em><em>, </em><em>optional</em>) – the gradient norm maximum</li>
+<li><strong>clip_value</strong> (<em>float</em><em>, </em><em>optional</em>) – the gradient value maximum</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
-<dt id="rlcc.learn.DPG.step">
-<code class="descname">step</code><span class="sig-paren">(</span><em>transitions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DPG.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DPG.step" title="Permalink to this definition">¶</a></dt>
+<dt id="rlcc.learn.DPGActor.loss">
+<code class="descname">loss</code><span class="sig-paren">(</span><em>transitions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DPGActor.loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DPGActor.loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the loss of the transitions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transitions</strong> (<a class="reference internal" href="rlcc.html#rlcc.Transition" title="rlcc.Transition"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.Transition</span></code></a>) – a list of <a class="reference internal" href="rlcc.html#rlcc.Transition" title="rlcc.Transition"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.Transition</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.learn.DPGCritic">
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">DPGCritic</code><span class="sig-paren">(</span><em>critic_local</em>, <em>critic_target</em>, <em>critic_optimizer</em>, <em>actor</em>, <em>gamma=0.99</em>, <em>tau=0.001</em>, <em>observers=None</em>, <em>clip_norm=None</em>, <em>clip_value=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DPGCritic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DPGCritic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements Deterministic Policy Gradient Critic learner.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>critic_local</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>) – the local network</li>
+<li><strong>critic_target</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>) – the target network</li>
+<li><strong>critic_optimizer</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>) – the optimizer</li>
+<li><strong>actor</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>) – the actor</li>
+<li><strong>tau</strong> (<em>float</em><em>, </em><em>optional</em>) – the update weight</li>
+<li><strong>observers</strong> (<em>list of observers</em><em>, </em><em>optional</em>) – list of observers</li>
+<li><strong>clip_norm</strong> (<em>float</em><em>, </em><em>optional</em>) – the gradient norm maximum</li>
+<li><strong>clip_value</strong> (<em>float</em><em>, </em><em>optional</em>) – the gradient value maximum</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="rlcc.learn.DPGCritic.step">
+<code class="descname">step</code><span class="sig-paren">(</span><em>transitions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DPGCritic.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DPGCritic.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the loss of the transitions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transitions</strong> (<a class="reference internal" href="rlcc.html#rlcc.Transition" title="rlcc.Transition"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.Transition</span></code></a>) – a list of <a class="reference internal" href="rlcc.html#rlcc.Transition" title="rlcc.Transition"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.Transition</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.learn.DoubleLearningStrategy">
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">DoubleLearningStrategy</code><span class="sig-paren">(</span><em>local</em>, <em>target</em>, <em>optimizer</em>, <em>tau=0.001</em>, <em>observers=None</em>, <em>clip_norm=None</em>, <em>clip_value=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DoubleLearningStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DoubleLearningStrategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements a double learning strategy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>local</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>) – the local network</li>
+<li><strong>target</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>) – the target network</li>
+<li><strong>optimizer</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>) – the optimizer</li>
+<li><strong>tau</strong> (<em>float</em><em>, </em><em>optional</em>) – the update weight</li>
+<li><strong>observers</strong> (<em>list of observers</em><em>, </em><em>optional</em>) – list of observers</li>
+<li><strong>clip_norm</strong> (<em>float</em><em>, </em><em>optional</em>) – the gradient norm maximum</li>
+<li><strong>clip_value</strong> (<em>float</em><em>, </em><em>optional</em>) – the gradient value maximum</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="rlcc.learn.DoubleLearningStrategy.loss">
+<code class="descname">loss</code><span class="sig-paren">(</span><em>transitions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DoubleLearningStrategy.loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DoubleLearningStrategy.loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the loss of the transitions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transitions</strong> (<a class="reference internal" href="rlcc.html#rlcc.Transition" title="rlcc.Transition"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.Transition</span></code></a>) – a list of <a class="reference internal" href="rlcc.html#rlcc.Transition" title="rlcc.Transition"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.Transition</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.learn.DoubleLearningStrategy.step">
+<code class="descname">step</code><span class="sig-paren">(</span><em>transitions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DoubleLearningStrategy.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DoubleLearningStrategy.step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs a single learning step.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>transitions (list of Transition): transitions</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transitions</strong> (<a class="reference internal" href="rlcc.html#rlcc.Transition" title="rlcc.Transition"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.Transition</span></code></a>) – a list of <a class="reference internal" href="rlcc.html#rlcc.Transition" title="rlcc.Transition"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.Transition</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -174,6 +292,7 @@
 <dt id="rlcc.learn.Learner">
 <em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">Learner</code><a class="reference internal" href="_modules/rlcc/learn.html#Learner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.Learner" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for all learners.</p>
+<p>Your learners should also subclass this class.</p>
 <dl class="method">
 <dt id="rlcc.learn.Learner.learn">
 <code class="descname">learn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#Learner.learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.Learner.learn" title="Permalink to this definition">¶</a></dt>
@@ -186,22 +305,49 @@
 <dt id="rlcc.learn.LearningStrategy">
 <em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">LearningStrategy</code><a class="reference internal" href="_modules/rlcc/learn.html#LearningStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.LearningStrategy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for all learning strategies.</p>
+<p>Your learning strategies should also subclass this class.</p>
 <dl class="method">
 <dt id="rlcc.learn.LearningStrategy.step">
 <code class="descname">step</code><span class="sig-paren">(</span><em>transitions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#LearningStrategy.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.LearningStrategy.step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs a single learning step.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>transitions (list of Transition): transitions</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transitions</strong> (<a class="reference internal" href="rlcc.html#rlcc.Transition" title="rlcc.Transition"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.Transition</span></code></a>) – a list of <a class="reference internal" href="rlcc.html#rlcc.Transition" title="rlcc.Transition"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.Transition</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
+<dt id="rlcc.learn.NetworkedLearningObserver">
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">NetworkedLearningObserver</code><a class="reference internal" href="_modules/rlcc/learn.html#NetworkedLearningObserver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.NetworkedLearningObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for networked learning observers.</p>
+<p>Your learning observers should also subclass this class.</p>
+</dd></dl>
+
+<dl class="class">
 <dt id="rlcc.learn.ReplayLearner">
-<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">ReplayLearner</code><span class="sig-paren">(</span><em>learning_strategy</em>, <em>transitions</em>, <em>device=None</em>, <em>batch_size=128</em>, <em>batches_per_step=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#ReplayLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.ReplayLearner" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">ReplayLearner</code><span class="sig-paren">(</span><em>learning_strategy</em>, <em>transitions</em>, <em>batch_size=128</em>, <em>batches_per_step=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#ReplayLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.ReplayLearner" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements a learner using a replay buffer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>learning_strategy</strong> (<a class="reference internal" href="#rlcc.learn.LearningStrategy" title="rlcc.learn.LearningStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.learn.LearningStrategy</span></code></a>) – delegate learning strategy</li>
+<li><strong>transitions</strong> (list of <a class="reference internal" href="rlcc.html#rlcc.Transition" title="rlcc.Transition"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.Transition</span></code></a>) – list of transitions</li>
+<li><strong>device</strong> (<em>str</em><em>, </em><em>optional</em>) – the torch device</li>
+<li><strong>batch_size</strong> (<em>int</em><em>, </em><em>optional</em>) – the batch size</li>
+<li><strong>batches_per_step</strong> (<em>int</em><em>, </em><em>optional</em>) – the number of batches per step</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="rlcc.learn.ReplayLearner.learn">
 <code class="descname">learn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#ReplayLearner.learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.ReplayLearner.learn" title="Permalink to this definition">¶</a></dt>
@@ -214,10 +360,46 @@
 <dt id="rlcc.learn.StackedLearner">
 <em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">StackedLearner</code><span class="sig-paren">(</span><em>learners</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#StackedLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.StackedLearner" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements a learner that delegates to other learners.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>learners</strong> (list of <a class="reference internal" href="#rlcc.learn.Learner" title="rlcc.learn.Learner"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.learn.Learner</span></code></a>) – list of learners</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="rlcc.learn.StackedLearner.learn">
 <code class="descname">learn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#StackedLearner.learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.StackedLearner.learn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs a single learning step.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcc.learn.StackedLearningStrategy">
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">StackedLearningStrategy</code><span class="sig-paren">(</span><em>strategies</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#StackedLearningStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.StackedLearningStrategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements stacked learning strategy</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>strategies</strong> (list of <a class="reference internal" href="#rlcc.learn.LearningStrategy" title="rlcc.learn.LearningStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.learn.LearningStrategy</span></code></a>) – list of learning strategies</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="rlcc.learn.StackedLearningStrategy.step">
+<code class="descname">step</code><span class="sig-paren">(</span><em>transitions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#StackedLearningStrategy.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.StackedLearningStrategy.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a single learning step.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transitions</strong> (<a class="reference internal" href="rlcc.html#rlcc.Transition" title="rlcc.Transition"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.Transition</span></code></a>) – a list of <a class="reference internal" href="rlcc.html#rlcc.Transition" title="rlcc.Transition"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.Transition</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -232,7 +414,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="noise.html" class="btn btn-neutral float-right" title="rlcc.noise" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="model.html" class="btn btn-neutral float-right" title="rlcc.model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="act.html" class="btn btn-neutral" title="rlcc.act" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

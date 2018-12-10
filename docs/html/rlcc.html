@@ -83,6 +83,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">rlcc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="act.html">rlcc.act</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learn.html">rlcc.learn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">rlcc.model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="noise.html">rlcc.noise</a></li>
 <li class="toctree-l1"><a class="reference internal" href="observe.html">rlcc.observe</a></li>
 <li class="toctree-l1"><a class="reference internal" href="replay.html">rlcc.replay</a></li>
@@ -127,6 +128,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -139,7 +142,10 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/rlcc.rst.txt" rel="nofollow"> View page source</a>
+            
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/pjordan/rlcc" class="fa fa-github"> Edit on GitHub</a>
+            
           
         
       </li>
@@ -162,14 +168,14 @@ of reinforcement learning.</p>
 <dt id="rlcc.transition">
 <code class="descclassname">rlcc.</code><code class="descname">transition</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc.html#transition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.transition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a transition object from arguments.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>state (tensor): The state the transition is from.
-action (tensor): The action taken in the transition.
-reward (tensor): The reward for transitioning.
-next_state (tensor): The state the transition is to.
-is_terminal (tensor): If terminal then 1.0, 0.0 otherwise.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>tensors</em>) – tuple of (state, action, reward, next_state, is_terminal) tensors</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -177,11 +183,14 @@ is_terminal (tensor): If terminal then 1.0, 0.0 otherwise.</dd>
 <code class="descclassname">rlcc.</code><code class="descname">tensor</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc.html#tensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.tensor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructs a torch <cite>tensor</cite> with data that returns
 a tensor of float data type.</p>
-<dl class="docutils">
-<dt>Arguments:</dt>
-<dd>data (array_like) – Initial data for the tensor. 
-Can be a list, tuple, NumPy ndarray, scalar, and other types.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>Can be a list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy ndarray</em><em>, </em><em>scalar</em><em>, </em><em>and other types.</em>) – data for the tensor.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -190,31 +199,31 @@ Can be a list, tuple, NumPy ndarray, scalar, and other types.</dd>
 <dd><dl class="attribute">
 <dt id="rlcc.Transition.action">
 <code class="descname">action</code><a class="headerlink" href="#rlcc.Transition.action" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 1</p>
+<dd><p>Alias for field number 1: The action taken in the transition.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="rlcc.Transition.is_terminal">
 <code class="descname">is_terminal</code><a class="headerlink" href="#rlcc.Transition.is_terminal" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 4</p>
+<dd><p>Alias for field number 4: If terminal then 1.0, 0.0 otherwise.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="rlcc.Transition.next_state">
 <code class="descname">next_state</code><a class="headerlink" href="#rlcc.Transition.next_state" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 3</p>
+<dd><p>Alias for field number 3: The state the transition is to.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="rlcc.Transition.reward">
 <code class="descname">reward</code><a class="headerlink" href="#rlcc.Transition.reward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 2</p>
+<dd><p>Alias for field number 2: The reward for transitioning.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="rlcc.Transition.state">
 <code class="descname">state</code><a class="headerlink" href="#rlcc.Transition.state" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 0</p>
+<dd><p>Alias for field number 0: The state the transition is from.</p>
 </dd></dl>
 
 </dd></dl>

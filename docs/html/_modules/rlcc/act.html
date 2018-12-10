@@ -81,6 +81,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../rlcc.html">rlcc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../act.html">rlcc.act</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../learn.html">rlcc.learn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../model.html">rlcc.model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../noise.html">rlcc.noise</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../observe.html">rlcc.observe</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../replay.html">rlcc.replay</a></li>
@@ -151,74 +152,137 @@
            <div itemprop="articleBody">
             
   <h1>Source code for rlcc.act</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Actor and related functionality.&quot;&quot;&quot;</span>
+
+
 <span class="kn">import</span> <span class="nn">torch</span>
 
-<div class="viewcode-block" id="Actor"><a class="viewcode-back" href="../../index.html#rlcc.act.Actor">[docs]</a><span class="k">class</span> <span class="nc">Actor</span><span class="p">():</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Base class for all actors.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
 
+<div class="viewcode-block" id="Actor"><a class="viewcode-back" href="../../act.html#rlcc.act.Actor">[docs]</a><span class="k">class</span> <span class="nc">Actor</span><span class="p">():</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Base class for all actors.</span>
+<span class="sd">    </span>
+<span class="sd">    Your actors should also subclass this class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
-<div class="viewcode-block" id="Actor.act"><a class="viewcode-back" href="../../index.html#rlcc.act.Actor.act">[docs]</a>    <span class="k">def</span> <span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns actions for given state as numpy array.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Actor.act"><a class="viewcode-back" href="../../act.html#rlcc.act.Actor.act">[docs]</a>    <span class="k">def</span> <span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns actions for given state as tensor.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns an action tensor</span>
+
+<span class="sd">        :param state: state tensor</span>
+<span class="sd">        :type state: `torch.tensor`</span>
+<span class="sd">        :return: action tensor</span>
+<span class="sd">        :rtype: `torch.tensor`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
 
 
-<div class="viewcode-block" id="NetworkActor"><a class="viewcode-back" href="../../index.html#rlcc.act.NetworkActor">[docs]</a><span class="k">class</span> <span class="nc">NetworkActor</span><span class="p">(</span><span class="n">Actor</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Implements Deterministic Policy Gradient.</span>
+<div class="viewcode-block" id="NetworkActor"><a class="viewcode-back" href="../../act.html#rlcc.act.NetworkActor">[docs]</a><span class="k">class</span> <span class="nc">NetworkActor</span><span class="p">(</span><span class="n">Actor</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;This is an implementation of an actor whose policy is encoded as a network.</span>
+<span class="sd">    </span>
+<span class="sd">    :param network: A network that returns an action for a state</span>
+<span class="sd">    :type network: class:`torch.nn.Module`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">network</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">network</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NetworkActor</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">network</span> <span class="o">=</span> <span class="n">network</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
 
-<div class="viewcode-block" id="NetworkActor.act"><a class="viewcode-back" href="../../index.html#rlcc.act.NetworkActor.act">[docs]</a>    <span class="k">def</span> <span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns actions for given state as numpy array.&quot;&quot;&quot;</span>
-        <span class="n">state</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+<div class="viewcode-block" id="NetworkActor.act"><a class="viewcode-back" href="../../act.html#rlcc.act.NetworkActor.act">[docs]</a>    <span class="k">def</span> <span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns actions for given state as tensor.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns an action tensor</span>
+
+<span class="sd">        :param state: state tensor</span>
+<span class="sd">        :type state: `torch.tensor`</span>
+<span class="sd">        :return: action tensor</span>
+<span class="sd">        :rtype: `torch.tensor`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
         <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
-            <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">action</span></div></div>
 
-<div class="viewcode-block" id="NoisyActor"><a class="viewcode-back" href="../../index.html#rlcc.act.NoisyActor">[docs]</a><span class="k">class</span> <span class="nc">NoisyActor</span><span class="p">(</span><span class="n">Actor</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Implements a noisy actor policy.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
 
+<div class="viewcode-block" id="NoisyActor"><a class="viewcode-back" href="../../act.html#rlcc.act.NoisyActor">[docs]</a><span class="k">class</span> <span class="nc">NoisyActor</span><span class="p">(</span><span class="n">Actor</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Implements a noisy actor policy.</span>
+
+<span class="sd">    :param base_actor: the actor whose actions noise is added.</span>
+<span class="sd">    :type base_actor: class:`rlcc.act.Actor`</span>
+<span class="sd">    :param noise_process: Device where the states should be sent</span>
+<span class="sd">    :type noise_process: rlcc.noise.NoiseProcess</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_actor</span><span class="p">,</span> <span class="n">noise_process</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NoisyActor</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_actor</span> <span class="o">=</span> <span class="n">base_actor</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">noise_process</span> <span class="o">=</span> <span class="n">noise_process</span>
  
-<div class="viewcode-block" id="NoisyActor.act"><a class="viewcode-back" href="../../index.html#rlcc.act.NoisyActor.act">[docs]</a>    <span class="k">def</span> <span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns actions for given state as numpy array.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_actor</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_process</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span></div></div>
-    
-<div class="viewcode-block" id="ClippingActor"><a class="viewcode-back" href="../../index.html#rlcc.act.ClippingActor">[docs]</a><span class="k">class</span> <span class="nc">ClippingActor</span><span class="p">(</span><span class="n">Actor</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Implements an actor policy that clips the actions.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="NoisyActor.act"><a class="viewcode-back" href="../../act.html#rlcc.act.NoisyActor.act">[docs]</a>    <span class="k">def</span> <span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns actions for given state as tensor.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns an action tensor</span>
 
+<span class="sd">        :param state: state tensor</span>
+<span class="sd">        :type state: `torch.tensor`</span>
+<span class="sd">        :return: action tensor</span>
+<span class="sd">        :rtype: `torch.tensor`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_actor</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_process</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="ClippingActor"><a class="viewcode-back" href="../../act.html#rlcc.act.ClippingActor">[docs]</a><span class="k">class</span> <span class="nc">ClippingActor</span><span class="p">(</span><span class="n">Actor</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Implements an actor policy that clips the actions.</span>
+
+<span class="sd">    :param base_actor: the actor whose actions noise is added.</span>
+<span class="sd">    :type network: class:`rlcc.act.Actor`</span>
+<span class="sd">    :param action_min: Minimal action value</span>
+<span class="sd">    :type action_min: scalar or numpy.Array, optional</span>
+<span class="sd">    :param action_max: Maximal action value</span>
+<span class="sd">    :type action_max: scalar or numpy.Array, optional</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_actor</span><span class="p">,</span> <span class="n">action_min</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">action_max</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ClippingActor</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_actor</span> <span class="o">=</span> <span class="n">base_actor</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">action_min</span> <span class="o">=</span> <span class="n">action_min</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">action_max</span> <span class="o">=</span> <span class="n">action_max</span>
  
-<div class="viewcode-block" id="ClippingActor.act"><a class="viewcode-back" href="../../index.html#rlcc.act.ClippingActor.act">[docs]</a>    <span class="k">def</span> <span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns actions for given state as numpy array.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_actor</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">state</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_max</span><span class="p">)</span></div></div>
+<div class="viewcode-block" id="ClippingActor.act"><a class="viewcode-back" href="../../act.html#rlcc.act.ClippingActor.act">[docs]</a>    <span class="k">def</span> <span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns actions for given state as tensor.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns an action tensor</span>
 
-<div class="viewcode-block" id="StackedActor"><a class="viewcode-back" href="../../index.html#rlcc.act.StackedActor">[docs]</a><span class="k">class</span> <span class="nc">StackedActor</span><span class="p">(</span><span class="n">Actor</span><span class="p">):</span>
+<span class="sd">        :param state: state tensor</span>
+<span class="sd">        :type state: `torch.tensor`</span>
+<span class="sd">        :return: action tensor</span>
+<span class="sd">        :rtype: `torch.tensor`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_actor</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">state</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_max</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="StackedActor"><a class="viewcode-back" href="../../act.html#rlcc.act.StackedActor">[docs]</a><span class="k">class</span> <span class="nc">StackedActor</span><span class="p">(</span><span class="n">Actor</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Creates a network actor.</span>
+
+<span class="sd">        :param actors: list of actors</span>
+<span class="sd">        :type actors: class:`rlcc.act.Actor`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actors</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">StackedActor</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actors</span> <span class="o">=</span> <span class="n">actors</span>
         
-<div class="viewcode-block" id="StackedActor.act"><a class="viewcode-back" href="../../index.html#rlcc.act.StackedActor.act">[docs]</a>    <span class="k">def</span> <span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns actions for given state as numpy array.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">actor</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">actor</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actors</span><span class="p">)])</span></div></div>
+<div class="viewcode-block" id="StackedActor.act"><a class="viewcode-back" href="../../act.html#rlcc.act.StackedActor.act">[docs]</a>    <span class="k">def</span> <span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns actions for given state as tensor.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns an action tensor</span>
+
+<span class="sd">        :param state: state tensor</span>
+<span class="sd">        :type state: `torch.tensor`</span>
+<span class="sd">        :return: action tensor</span>
+<span class="sd">        :rtype: `torch.tensor`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">actor</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">actor</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actors</span><span class="p">)])</span></div></div>
 </pre></div>
 
            </div>
