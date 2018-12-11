@@ -1,11 +1,4 @@
-"""Model utility functions"""
-
-
-import numpy as np
-
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+r"""Model utility functions"""
 
 
 def soft_update(target, local, tau):

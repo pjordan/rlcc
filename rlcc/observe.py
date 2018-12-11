@@ -1,4 +1,4 @@
-
+r"""Transition observation functions"""
 
 class Observer():
     r"""Base class for all observers.
@@ -33,28 +33,6 @@ class BufferedObserver(Observer):
         :type transition: :class:`rlcc.Transition`
         """
         self.buffer.append(transition)
-
-class PreprocessingObserver(Observer):
-    r"""Observer that places the transitions in a buffer.
-
-    :param base_observer: the buffer
-    :type base_observer: :class:`rlcc.observe.Observer`
-    :param preprocessing_fn: the preprocessing function
-    :type preprocessing_fn: function
-    """
-    def __init__(self, base_observer, preprocessing_fn):
-        super(PreprocessingObserver, self).__init__()
-        self.base_observer = base_observer
-        self.preprocessing_fn = preprocessing_fn
-
-    def observe(self, transition):
-        r"""Observe a transition.
-
-        :param transition: the transition
-        :type transition: :class:`rlcc.Transition`
-        """
-        self.base_observer.observe(self.preprocessing_fn(transition))
-
 
 class StackedObserver(Observer):
     r"""Stacked observers

@@ -47,7 +47,7 @@ class ContinuousActor(nn.Module):
         """
         x = F.leaky_relu(self.fc1(state))
         x = F.leaky_relu(self.fc2(x))
-        return F.tanh(self.fc3(x))
+        return torch.tanh(self.fc3(x))
 
 class ContinuousCritic(nn.Module):
     """ContinuousCritic network

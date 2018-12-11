@@ -1,8 +1,6 @@
 r"""Transition-related functions"""
 
 
-import random
-import numpy as np
 import torch
 from . import transition
 
@@ -31,7 +29,8 @@ class _TransitionReplayerIter(object):
         return len(self.transitions)
     
     def __next__(self):
-        return self.collate_fn(random.sample(self.transitions, k=self.batch_size))
+        indices = torch.randint(high=len(self.transitions), size=(self.batch_size,), dtype=torch.int64).tolist()
+        return self.collate_fn([self.transitions[i] for i in indices])
 
     def __iter__(self):
         return self

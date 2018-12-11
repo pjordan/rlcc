@@ -1,3 +1,5 @@
+r"""Noise process functions."""
+
 import torch
 
 class NoiseProcess():
@@ -16,6 +18,25 @@ class NoiseProcess():
         r"""Sample the noise process."""
         raise NotImplementedError
 
+class DeviceNoiseProcess(NoiseProcess):
+    r"""Device noise process
+
+    :param process: the delegate process
+    :type process: :class:`rlcc.noise.NoiseProcess`
+    :param device: tensor device
+    :type device: str
+    """
+    def __init__(self, process, device):
+        super(DeviceNoiseProcess, self).__init__()
+        self.process = process
+        self.device = device
+
+    def reset(self):
+        self.process.reset()
+
+    def sample(self):
+        return self.process.sample().to(self.device)
+    
 class ScaledProcess(NoiseProcess):
     r"""Scaled process
 
@@ -54,9 +75,7 @@ class ScheduledScaledProcess(NoiseProcess):
         self.scale_schedule.reset()
 
     def sample(self):
-        scaled_sample = self.process.sample() * self.scale_schedule.value()
-        self.scale_schedule.update()
-        return scaled_sample
+        return self.process.sample() * self.scale_schedule.value()
 
 # Based on https://github.com/songrotek/DDPG/blob/master/ou_noise.py
 class OUProcess(NoiseProcess):
@@ -71,13 +90,12 @@ class OUProcess(NoiseProcess):
     :param sigma: sigma
     :type sigma: float
     """
-    def __init__(self, action_dimension, mu=0, theta=0.15, sigma=0.2):
+    def __init__(self, action_dimension, mu=0, theta=0.15, sigma=0.2, device=None):
         super(OUProcess, self).__init__()
         self.action_dimension = action_dimension
         self.mu = mu
         self.theta = theta
         self.sigma = sigma
-        self.state = torch.ones(self.action_dimension) * self.mu
         self.reset()
 
     def reset(self):

@@ -104,18 +104,6 @@ class StackedLearningStrategy(LearningStrategy):
             strategy.step(transitions)
 
 
-class NetworkedLearningObserver():
-    r"""Base class for networked learning observers.
-
-    Your learning observers should also subclass this class.
-    """
-    def __init__(self):
-        r"""Constructor method"""
-        pass
-    
-    def observe_learning(self, network, loss, learning_step):
-        pass
-
 class DoubleLearningStrategy(LearningStrategy):
     r"""Implements a double learning strategy.
     
@@ -127,8 +115,6 @@ class DoubleLearningStrategy(LearningStrategy):
     :type optimizer: :class:`torch.nn.Module`
     :param tau: the update weight
     :type tau: float, optional
-    :param observers: list of observers
-    :type observers: list of observers, optional
     :param clip_norm: the gradient norm maximum
     :type clip_norm: float, optional
     :param clip_value: the gradient value maximum
@@ -139,7 +125,6 @@ class DoubleLearningStrategy(LearningStrategy):
                  target,
                  optimizer,
                  tau=1e-3, 
-                 observers=None,
                  clip_norm=None,
                  clip_value=None):
         r"""Constructor method"""
@@ -149,8 +134,6 @@ class DoubleLearningStrategy(LearningStrategy):
         self.target = target
         self.optimizer = optimizer
         self.observers = []
-        if observers:
-            self.observers.extend(observers)
         self.clip_norm = clip_norm
         self.clip_value = clip_value
         self.learning_steps = 0
@@ -162,7 +145,7 @@ class DoubleLearningStrategy(LearningStrategy):
         :type transitions: :class:`rlcc.Transition`
         """
         # Compute actor loss
-        loss = -self.loss(transitions)
+        loss = self.loss(transitions)
         # Minimize the loss
         self.optimizer.zero_grad()
         loss.backward()
@@ -175,7 +158,7 @@ class DoubleLearningStrategy(LearningStrategy):
         self.optimizer.step()
         # Notify the observers
         for obs in self.observers:
-            obs.observe_learning(self.local, loss, self.learning_steps)
+            obs(transitions=transitions, local=self.local, loss=loss, learning_steps=self.learning_steps)
         # soft updates
         soft_update(self.target, self.local, self.tau)
 
@@ -216,8 +199,7 @@ class DPGActor(DoubleLearningStrategy):
                  actor_target,
                  actor_optimizer, 
                  critic,
-                 tau=1e-3, 
-                 observers=None,
+                 tau=1e-3,
                  clip_norm=None,
                  clip_value=None):
         r"""Constructor method"""
@@ -225,8 +207,7 @@ class DPGActor(DoubleLearningStrategy):
             actor_local, 
             actor_target,
             actor_optimizer,
-            tau=tau, 
-            observers=observers,
+            tau=tau,
             clip_norm=clip_norm,
             clip_value=clip_value)
         self.critic = critic
@@ -268,8 +249,7 @@ class DPGCritic(DoubleLearningStrategy):
                  critic_optimizer, 
                  actor,
                  gamma=0.99, 
-                 tau=1e-3, 
-                 observers=None,
+                 tau=1e-3,
                  clip_norm=None,
                  clip_value=None):
         r"""Constructor method"""
@@ -277,14 +257,13 @@ class DPGCritic(DoubleLearningStrategy):
             critic_local, 
             critic_target,
             critic_optimizer,
-            tau=tau, 
-            observers=observers,
+            tau=tau,
             clip_norm=clip_norm,
             clip_value=clip_value)
         self.gamma = gamma
         self.actor = actor
 
-    def step(self, transitions):
+    def loss(self, transitions):
         r"""Compute the loss of the transitions
 
         :param transitions: a list of :class:`rlcc.Transition`
@@ -292,13 +271,14 @@ class DPGCritic(DoubleLearningStrategy):
         """
         # Unpack tuples
         states, actions, rewards, next_states, is_terminals = transitions
-        
+              
         # Get predicted next-state actions and Q values from target models
         actions_next = self.actor(next_states)
         q_targets_next = self.target(next_states, actions_next)
         
         # Compute Q targets for current states
         q_targets = rewards + (self.gamma * q_targets_next * (1 - is_terminals))
+        
         # Compute critic loss
         q_expected = self.local(states, actions)
         return F.mse_loss(q_expected, q_targets)
