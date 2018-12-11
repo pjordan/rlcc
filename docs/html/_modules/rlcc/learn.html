@@ -258,18 +258,6 @@
             <span class="n">strategy</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">transitions</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="NetworkedLearningObserver"><a class="viewcode-back" href="../../learn.html#rlcc.learn.NetworkedLearningObserver">[docs]</a><span class="k">class</span> <span class="nc">NetworkedLearningObserver</span><span class="p">():</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Base class for networked learning observers.</span>
-
-<span class="sd">    Your learning observers should also subclass this class.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
-        <span class="k">pass</span>
-    
-    <span class="k">def</span> <span class="nf">observe_learning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">network</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">learning_step</span><span class="p">):</span>
-        <span class="k">pass</span></div>
-
 <div class="viewcode-block" id="DoubleLearningStrategy"><a class="viewcode-back" href="../../learn.html#rlcc.learn.DoubleLearningStrategy">[docs]</a><span class="k">class</span> <span class="nc">DoubleLearningStrategy</span><span class="p">(</span><span class="n">LearningStrategy</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Implements a double learning strategy.</span>
 <span class="sd">    </span>
@@ -281,8 +269,6 @@
 <span class="sd">    :type optimizer: :class:`torch.nn.Module`</span>
 <span class="sd">    :param tau: the update weight</span>
 <span class="sd">    :type tau: float, optional</span>
-<span class="sd">    :param observers: list of observers</span>
-<span class="sd">    :type observers: list of observers, optional</span>
 <span class="sd">    :param clip_norm: the gradient norm maximum</span>
 <span class="sd">    :type clip_norm: float, optional</span>
 <span class="sd">    :param clip_value: the gradient value maximum</span>
@@ -293,7 +279,6 @@
                  <span class="n">target</span><span class="p">,</span>
                  <span class="n">optimizer</span><span class="p">,</span>
                  <span class="n">tau</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> 
-                 <span class="n">observers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">clip_norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">clip_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
@@ -303,8 +288,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">observers</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">observers</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">observers</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">observers</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">clip_norm</span> <span class="o">=</span> <span class="n">clip_norm</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">clip_value</span> <span class="o">=</span> <span class="n">clip_value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">learning_steps</span> <span class="o">=</span> <span class="mi">0</span>
@@ -316,7 +299,7 @@
 <span class="sd">        :type transitions: :class:`rlcc.Transition`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Compute actor loss</span>
-        <span class="n">loss</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">transitions</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">transitions</span><span class="p">)</span>
         <span class="c1"># Minimize the loss</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
         <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
@@ -329,7 +312,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
         <span class="c1"># Notify the observers</span>
         <span class="k">for</span> <span class="n">obs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">observers</span><span class="p">:</span>
-            <span class="n">obs</span><span class="o">.</span><span class="n">observe_learning</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_steps</span><span class="p">)</span>
+            <span class="n">obs</span><span class="p">(</span><span class="n">transitions</span><span class="o">=</span><span class="n">transitions</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">local</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span> <span class="n">learning_steps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learning_steps</span><span class="p">)</span>
         <span class="c1"># soft updates</span>
         <span class="n">soft_update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">local</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">)</span>
 
@@ -370,8 +353,7 @@
                  <span class="n">actor_target</span><span class="p">,</span>
                  <span class="n">actor_optimizer</span><span class="p">,</span> 
                  <span class="n">critic</span><span class="p">,</span>
-                 <span class="n">tau</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> 
-                 <span class="n">observers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">tau</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
                  <span class="n">clip_norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">clip_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
@@ -379,8 +361,7 @@
             <span class="n">actor_local</span><span class="p">,</span> 
             <span class="n">actor_target</span><span class="p">,</span>
             <span class="n">actor_optimizer</span><span class="p">,</span>
-            <span class="n">tau</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> 
-            <span class="n">observers</span><span class="o">=</span><span class="n">observers</span><span class="p">,</span>
+            <span class="n">tau</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span>
             <span class="n">clip_norm</span><span class="o">=</span><span class="n">clip_norm</span><span class="p">,</span>
             <span class="n">clip_value</span><span class="o">=</span><span class="n">clip_value</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">critic</span> <span class="o">=</span> <span class="n">critic</span>
@@ -422,8 +403,7 @@
                  <span class="n">critic_optimizer</span><span class="p">,</span> 
                  <span class="n">actor</span><span class="p">,</span>
                  <span class="n">gamma</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> 
-                 <span class="n">tau</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> 
-                 <span class="n">observers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">tau</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
                  <span class="n">clip_norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">clip_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructor method&quot;&quot;&quot;</span>
@@ -431,14 +411,13 @@
             <span class="n">critic_local</span><span class="p">,</span> 
             <span class="n">critic_target</span><span class="p">,</span>
             <span class="n">critic_optimizer</span><span class="p">,</span>
-            <span class="n">tau</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> 
-            <span class="n">observers</span><span class="o">=</span><span class="n">observers</span><span class="p">,</span>
+            <span class="n">tau</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span>
             <span class="n">clip_norm</span><span class="o">=</span><span class="n">clip_norm</span><span class="p">,</span>
             <span class="n">clip_value</span><span class="o">=</span><span class="n">clip_value</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actor</span> <span class="o">=</span> <span class="n">actor</span>
 
-<div class="viewcode-block" id="DPGCritic.step"><a class="viewcode-back" href="../../learn.html#rlcc.learn.DPGCritic.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transitions</span><span class="p">):</span>
+<div class="viewcode-block" id="DPGCritic.loss"><a class="viewcode-back" href="../../learn.html#rlcc.learn.DPGCritic.loss">[docs]</a>    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transitions</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the loss of the transitions</span>
 
 <span class="sd">        :param transitions: a list of :class:`rlcc.Transition`</span>
@@ -446,13 +425,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Unpack tuples</span>
         <span class="n">states</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">next_states</span><span class="p">,</span> <span class="n">is_terminals</span> <span class="o">=</span> <span class="n">transitions</span>
-        
+              
         <span class="c1"># Get predicted next-state actions and Q values from target models</span>
         <span class="n">actions_next</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="p">(</span><span class="n">next_states</span><span class="p">)</span>
         <span class="n">q_targets_next</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">(</span><span class="n">next_states</span><span class="p">,</span> <span class="n">actions_next</span><span class="p">)</span>
         
         <span class="c1"># Compute Q targets for current states</span>
         <span class="n">q_targets</span> <span class="o">=</span> <span class="n">rewards</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">q_targets_next</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">is_terminals</span><span class="p">))</span>
+        
         <span class="c1"># Compute critic loss</span>
         <span class="n">q_expected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">actions</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">q_expected</span><span class="p">,</span> <span class="n">q_targets</span><span class="p">)</span></div></div>

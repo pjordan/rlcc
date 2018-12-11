@@ -160,6 +160,7 @@
             
   <div class="section" id="module-rlcc.observe">
 <span id="rlcc-observe"></span><h1>rlcc.observe<a class="headerlink" href="#module-rlcc.observe" title="Permalink to this headline">¶</a></h1>
+<p>Transition observation functions</p>
 <dl class="class">
 <dt id="rlcc.observe.BufferedObserver">
 <em class="property">class </em><code class="descclassname">rlcc.observe.</code><code class="descname">BufferedObserver</code><span class="sig-paren">(</span><em>buffer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/observe.html#BufferedObserver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.observe.BufferedObserver" title="Permalink to this definition">¶</a></dt>
@@ -196,38 +197,6 @@
 <dl class="method">
 <dt id="rlcc.observe.Observer.observe">
 <code class="descname">observe</code><span class="sig-paren">(</span><em>transition</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/observe.html#Observer.observe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.observe.Observer.observe" title="Permalink to this definition">¶</a></dt>
-<dd><p>Observe a transition.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transition</strong> (<a class="reference internal" href="rlcc.html#rlcc.Transition" title="rlcc.Transition"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.Transition</span></code></a>) – the transition</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="rlcc.observe.PreprocessingObserver">
-<em class="property">class </em><code class="descclassname">rlcc.observe.</code><code class="descname">PreprocessingObserver</code><span class="sig-paren">(</span><em>base_observer</em>, <em>preprocessing_fn</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/observe.html#PreprocessingObserver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.observe.PreprocessingObserver" title="Permalink to this definition">¶</a></dt>
-<dd><p>Observer that places the transitions in a buffer.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>base_observer</strong> (<a class="reference internal" href="#rlcc.observe.Observer" title="rlcc.observe.Observer"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.observe.Observer</span></code></a>) – the buffer</li>
-<li><strong>preprocessing_fn</strong> (<em>function</em>) – the preprocessing function</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="rlcc.observe.PreprocessingObserver.observe">
-<code class="descname">observe</code><span class="sig-paren">(</span><em>transition</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/observe.html#PreprocessingObserver.observe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.observe.PreprocessingObserver.observe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Observe a transition.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

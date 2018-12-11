@@ -160,6 +160,37 @@
             
   <div class="section" id="module-rlcc.noise">
 <span id="rlcc-noise"></span><h1>rlcc.noise<a class="headerlink" href="#module-rlcc.noise" title="Permalink to this headline">¶</a></h1>
+<p>Noise process functions.</p>
+<dl class="class">
+<dt id="rlcc.noise.DeviceNoiseProcess">
+<em class="property">class </em><code class="descclassname">rlcc.noise.</code><code class="descname">DeviceNoiseProcess</code><span class="sig-paren">(</span><em>process</em>, <em>device</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/noise.html#DeviceNoiseProcess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.noise.DeviceNoiseProcess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Device noise process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>process</strong> (<a class="reference internal" href="#rlcc.noise.NoiseProcess" title="rlcc.noise.NoiseProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcc.noise.NoiseProcess</span></code></a>) – the delegate process</li>
+<li><strong>device</strong> (<em>str</em>) – tensor device</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="rlcc.noise.DeviceNoiseProcess.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/noise.html#DeviceNoiseProcess.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.noise.DeviceNoiseProcess.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the noise process.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcc.noise.DeviceNoiseProcess.sample">
+<code class="descname">sample</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/noise.html#DeviceNoiseProcess.sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.noise.DeviceNoiseProcess.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample the noise process.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="class">
 <dt id="rlcc.noise.NoiseProcess">
 <em class="property">class </em><code class="descclassname">rlcc.noise.</code><code class="descname">NoiseProcess</code><a class="reference internal" href="_modules/rlcc/noise.html#NoiseProcess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.noise.NoiseProcess" title="Permalink to this definition">¶</a></dt>
@@ -181,7 +212,7 @@
 
 <dl class="class">
 <dt id="rlcc.noise.OUProcess">
-<em class="property">class </em><code class="descclassname">rlcc.noise.</code><code class="descname">OUProcess</code><span class="sig-paren">(</span><em>action_dimension</em>, <em>mu=0</em>, <em>theta=0.15</em>, <em>sigma=0.2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/noise.html#OUProcess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.noise.OUProcess" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">rlcc.noise.</code><code class="descname">OUProcess</code><span class="sig-paren">(</span><em>action_dimension</em>, <em>mu=0</em>, <em>theta=0.15</em>, <em>sigma=0.2</em>, <em>device=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/noise.html#OUProcess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.noise.OUProcess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ornstein-Uhlenbeck process: dx = theta * (mu-x) dt + sigma * dW</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

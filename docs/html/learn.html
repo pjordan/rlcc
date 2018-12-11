@@ -163,7 +163,7 @@
 <p>Learning and related functionality.</p>
 <dl class="class">
 <dt id="rlcc.learn.DPGActor">
-<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">DPGActor</code><span class="sig-paren">(</span><em>actor_local</em>, <em>actor_target</em>, <em>actor_optimizer</em>, <em>critic</em>, <em>tau=0.001</em>, <em>observers=None</em>, <em>clip_norm=None</em>, <em>clip_value=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DPGActor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DPGActor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">DPGActor</code><span class="sig-paren">(</span><em>actor_local</em>, <em>actor_target</em>, <em>actor_optimizer</em>, <em>critic</em>, <em>tau=0.001</em>, <em>clip_norm=None</em>, <em>clip_value=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DPGActor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DPGActor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements Deterministic Policy Gradient Actor learner.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -201,7 +201,7 @@
 
 <dl class="class">
 <dt id="rlcc.learn.DPGCritic">
-<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">DPGCritic</code><span class="sig-paren">(</span><em>critic_local</em>, <em>critic_target</em>, <em>critic_optimizer</em>, <em>actor</em>, <em>gamma=0.99</em>, <em>tau=0.001</em>, <em>observers=None</em>, <em>clip_norm=None</em>, <em>clip_value=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DPGCritic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DPGCritic" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">DPGCritic</code><span class="sig-paren">(</span><em>critic_local</em>, <em>critic_target</em>, <em>critic_optimizer</em>, <em>actor</em>, <em>gamma=0.99</em>, <em>tau=0.001</em>, <em>clip_norm=None</em>, <em>clip_value=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DPGCritic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DPGCritic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements Deterministic Policy Gradient Critic learner.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -222,8 +222,8 @@
 </tbody>
 </table>
 <dl class="method">
-<dt id="rlcc.learn.DPGCritic.step">
-<code class="descname">step</code><span class="sig-paren">(</span><em>transitions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DPGCritic.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DPGCritic.step" title="Permalink to this definition">¶</a></dt>
+<dt id="rlcc.learn.DPGCritic.loss">
+<code class="descname">loss</code><span class="sig-paren">(</span><em>transitions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DPGCritic.loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DPGCritic.loss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the loss of the transitions</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -239,7 +239,7 @@
 
 <dl class="class">
 <dt id="rlcc.learn.DoubleLearningStrategy">
-<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">DoubleLearningStrategy</code><span class="sig-paren">(</span><em>local</em>, <em>target</em>, <em>optimizer</em>, <em>tau=0.001</em>, <em>observers=None</em>, <em>clip_norm=None</em>, <em>clip_value=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DoubleLearningStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DoubleLearningStrategy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">DoubleLearningStrategy</code><span class="sig-paren">(</span><em>local</em>, <em>target</em>, <em>optimizer</em>, <em>tau=0.001</em>, <em>clip_norm=None</em>, <em>clip_value=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/learn.html#DoubleLearningStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.DoubleLearningStrategy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements a double learning strategy.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -250,7 +250,6 @@
 <li><strong>target</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>) – the target network</li>
 <li><strong>optimizer</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>) – the optimizer</li>
 <li><strong>tau</strong> (<em>float</em><em>, </em><em>optional</em>) – the update weight</li>
-<li><strong>observers</strong> (<em>list of observers</em><em>, </em><em>optional</em>) – list of observers</li>
 <li><strong>clip_norm</strong> (<em>float</em><em>, </em><em>optional</em>) – the gradient norm maximum</li>
 <li><strong>clip_value</strong> (<em>float</em><em>, </em><em>optional</em>) – the gradient value maximum</li>
 </ul>
@@ -320,13 +319,6 @@
 </table>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="class">
-<dt id="rlcc.learn.NetworkedLearningObserver">
-<em class="property">class </em><code class="descclassname">rlcc.learn.</code><code class="descname">NetworkedLearningObserver</code><a class="reference internal" href="_modules/rlcc/learn.html#NetworkedLearningObserver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.learn.NetworkedLearningObserver" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base class for networked learning observers.</p>
-<p>Your learning observers should also subclass this class.</p>
 </dd></dl>
 
 <dl class="class">

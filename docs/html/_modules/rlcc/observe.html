@@ -152,7 +152,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for rlcc.observe</h1><div class="highlight"><pre>
-<span></span>
+<span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Transition observation functions&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Observer"><a class="viewcode-back" href="../../observe.html#rlcc.observe.Observer">[docs]</a><span class="k">class</span> <span class="nc">Observer</span><span class="p">():</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Base class for all observers.</span>
@@ -187,28 +187,6 @@
 <span class="sd">        :type transition: :class:`rlcc.Transition`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">transition</span><span class="p">)</span></div></div>
-
-<div class="viewcode-block" id="PreprocessingObserver"><a class="viewcode-back" href="../../observe.html#rlcc.observe.PreprocessingObserver">[docs]</a><span class="k">class</span> <span class="nc">PreprocessingObserver</span><span class="p">(</span><span class="n">Observer</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Observer that places the transitions in a buffer.</span>
-
-<span class="sd">    :param base_observer: the buffer</span>
-<span class="sd">    :type base_observer: :class:`rlcc.observe.Observer`</span>
-<span class="sd">    :param preprocessing_fn: the preprocessing function</span>
-<span class="sd">    :type preprocessing_fn: function</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_observer</span><span class="p">,</span> <span class="n">preprocessing_fn</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">PreprocessingObserver</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">base_observer</span> <span class="o">=</span> <span class="n">base_observer</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">preprocessing_fn</span> <span class="o">=</span> <span class="n">preprocessing_fn</span>
-
-<div class="viewcode-block" id="PreprocessingObserver.observe"><a class="viewcode-back" href="../../observe.html#rlcc.observe.PreprocessingObserver.observe">[docs]</a>    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transition</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Observe a transition.</span>
-
-<span class="sd">        :param transition: the transition</span>
-<span class="sd">        :type transition: :class:`rlcc.Transition`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">base_observer</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">preprocessing_fn</span><span class="p">(</span><span class="n">transition</span><span class="p">))</span></div></div>
-
 
 <div class="viewcode-block" id="StackedObserver"><a class="viewcode-back" href="../../observe.html#rlcc.observe.StackedObserver">[docs]</a><span class="k">class</span> <span class="nc">StackedObserver</span><span class="p">(</span><span class="n">Observer</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Stacked observers</span>
