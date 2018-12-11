@@ -1,7 +1,7 @@
 :github_url: https://github.com/pjordan/rlcc
 
-rlcc.learn
+rlcc.model
 ===================================
 
-.. automodule:: rlcc.learn
+.. automodule:: rlcc.model
      :members:

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Python Module Index &mdash; rlcc  documentation</title>
+  <title>rlcc.model &mdash; rlcc  documentation</title>
   
 
   
@@ -28,9 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
- 
-
-
+    <link rel="next" title="rlcc.noise" href="noise.html" />
+    <link rel="prev" title="rlcc.learn" href="learn.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -79,16 +78,12 @@
               
             
             
-              <p class="caption"><span class="caption-text">Notes</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="notes/exploration.html">Exploration</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Package Reference</span></p>
-<ul>
+              <p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="rlcc.html">rlcc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="act.html">rlcc.act</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learn.html">rlcc.learn</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model.html">rlcc.model</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">rlcc.model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="noise.html">rlcc.noise</a></li>
 <li class="toctree-l1"><a class="reference internal" href="observe.html">rlcc.observe</a></li>
 <li class="toctree-l1"><a class="reference internal" href="replay.html">rlcc.replay</a></li>
@@ -133,16 +128,25 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Python Module Index</li>
+      <li>rlcc.model</li>
     
     
       <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/pjordan/rlcc" class="fa fa-github"> Edit on GitHub</a>
+            
+          
         
       </li>
     
@@ -154,70 +158,65 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
+  <div class="section" id="module-rlcc.model">
+<span id="rlcc-model"></span><h1>rlcc.model<a class="headerlink" href="#module-rlcc.model" title="Permalink to this headline">¶</a></h1>
+<p>Model utility functions</p>
+<dl class="function">
+<dt id="rlcc.model.hard_update">
+<code class="descclassname">rlcc.model.</code><code class="descname">hard_update</code><span class="sig-paren">(</span><em>target</em>, <em>local</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/model.html#hard_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.model.hard_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy network parameters from source to target.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>target</strong> (list of <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>) – target network</li>
+<li><strong>local</strong> (list of <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>) – target network</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
-   <h1>Python Module Index</h1>
+<dl class="function">
+<dt id="rlcc.model.soft_update">
+<code class="descclassname">rlcc.model.</code><code class="descname">soft_update</code><span class="sig-paren">(</span><em>target</em>, <em>local</em>, <em>tau</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/model.html#soft_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.model.soft_update" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Soft update model parameters.</dt>
+<dd>θ_target = τ*θ_local + (1 - τ)*θ_target</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>target</strong> (list of <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>) – target network</li>
+<li><strong>local</strong> (list of <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>) – target network</li>
+<li><strong>tau</strong> (<em>float</em>) – the weight</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
-   <div class="modindex-jumpbox">
-   <a href="#cap-r"><strong>r</strong></a>
-   </div>
-
-   <table class="indextable modindextable">
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-r"><td></td><td>
-       <strong>r</strong></td><td></td></tr>
-     <tr>
-       <td><img src="_static/minus.png" class="toggler"
-              id="toggle-1" style="display: none" alt="-" /></td>
-       <td>
-       <a href="rlcc.html#module-rlcc"><code class="xref">rlcc</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="act.html#module-rlcc.act"><code class="xref">rlcc.act</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="learn.html#module-rlcc.learn"><code class="xref">rlcc.learn</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="model.html#module-rlcc.model"><code class="xref">rlcc.model</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="noise.html#module-rlcc.noise"><code class="xref">rlcc.noise</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="observe.html#module-rlcc.observe"><code class="xref">rlcc.observe</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="replay.html#module-rlcc.replay"><code class="xref">rlcc.replay</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="schedule.html#module-rlcc.schedule"><code class="xref">rlcc.schedule</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="storage.html#module-rlcc.storage"><code class="xref">rlcc.storage</code></a></td><td>
-       <em></em></td></tr>
-   </table>
+</div>
 
 
            </div>
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="noise.html" class="btn btn-neutral float-right" title="rlcc.noise" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="learn.html" class="btn btn-neutral" title="rlcc.learn" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

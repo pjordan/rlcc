@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>rlcc.storage &mdash; rlcc  documentation</title>
+  <title>rlcc.model &mdash; rlcc  documentation</title>
   
 
   
@@ -140,7 +140,7 @@
         
           <li><a href="../rlcc.html">rlcc</a> &raquo;</li>
         
-      <li>rlcc.storage</li>
+      <li>rlcc.model</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -155,18 +155,35 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for rlcc.storage</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Strorage-related functions&quot;&quot;&quot;</span>
+  <h1>Source code for rlcc.model</h1><div class="highlight"><pre>
+<span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Model utility functions&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">deque</span>
 
-<div class="viewcode-block" id="buffer"><a class="viewcode-back" href="../../storage.html#rlcc.storage.buffer">[docs]</a><span class="k">def</span> <span class="nf">buffer</span><span class="p">(</span><span class="n">buffer_size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e5</span><span class="p">)):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Creates a buffer.</span>
-
-<span class="sd">    :param buffer_size: the additive delta</span>
-<span class="sd">    :type buffer_size: int, optional</span>
+<div class="viewcode-block" id="soft_update"><a class="viewcode-back" href="../../model.html#rlcc.model.soft_update">[docs]</a><span class="k">def</span> <span class="nf">soft_update</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">local</span><span class="p">,</span> <span class="n">tau</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Soft update model parameters.</span>
+<span class="sd">        θ_target = τ*θ_local + (1 - τ)*θ_target</span>
+<span class="sd">        </span>
+<span class="sd">    :param target: target network</span>
+<span class="sd">    :type target: list of :class:`torch.nn.Module`</span>
+<span class="sd">    :param local: target network</span>
+<span class="sd">    :type local: list of :class:`torch.nn.Module`</span>
+<span class="sd">    :param tau: the weight</span>
+<span class="sd">    :type tau: float</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="n">buffer_size</span><span class="p">)</span></div>
+    <span class="k">for</span> <span class="n">tparam</span><span class="p">,</span> <span class="n">lparam</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">local</span><span class="o">.</span><span class="n">parameters</span><span class="p">()):</span>
+        <span class="n">tparam</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy_</span><span class="p">(</span><span class="n">tau</span><span class="o">*</span><span class="n">lparam</span><span class="o">.</span><span class="n">data</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">tau</span><span class="p">)</span><span class="o">*</span><span class="n">tparam</span><span class="o">.</span><span class="n">data</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="hard_update"><a class="viewcode-back" href="../../model.html#rlcc.model.hard_update">[docs]</a><span class="k">def</span> <span class="nf">hard_update</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">local</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Copy network parameters from source to target.</span>
+<span class="sd">    </span>
+<span class="sd">    :param target: target network</span>
+<span class="sd">    :type target: list of :class:`torch.nn.Module`</span>
+<span class="sd">    :param local: target network</span>
+<span class="sd">    :type local: list of :class:`torch.nn.Module`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">tparam</span><span class="p">,</span> <span class="n">lparam</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">local</span><span class="o">.</span><span class="n">parameters</span><span class="p">()):</span>
+        <span class="n">tparam</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy_</span><span class="p">(</span><span class="n">lparam</span><span class="o">.</span><span class="n">data</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

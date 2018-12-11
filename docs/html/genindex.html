@@ -77,11 +77,16 @@
               
             
             
-              <p class="caption"><span class="caption-text">Package Reference</span></p>
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notes/exploration.html">Exploration</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="rlcc.html">rlcc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="act.html">rlcc.act</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learn.html">rlcc.learn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">rlcc.model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="noise.html">rlcc.noise</a></li>
 <li class="toctree-l1"><a class="reference internal" href="observe.html">rlcc.observe</a></li>
 <li class="toctree-l1"><a class="reference internal" href="replay.html">rlcc.replay</a></li>
@@ -158,11 +163,11 @@
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
- | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
@@ -221,9 +226,15 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="replay.html#rlcc.replay.default_collate">default_collate() (in module rlcc.replay)</a>
 </li>
+      <li><a href="noise.html#rlcc.noise.DeviceNoiseProcess">DeviceNoiseProcess (class in rlcc.noise)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="learn.html#rlcc.learn.DPG">DPG (class in rlcc.learn)</a>
+      <li><a href="learn.html#rlcc.learn.DoubleLearningStrategy">DoubleLearningStrategy (class in rlcc.learn)</a>
+</li>
+      <li><a href="learn.html#rlcc.learn.DPGActor">DPGActor (class in rlcc.learn)</a>
+</li>
+      <li><a href="learn.html#rlcc.learn.DPGCritic">DPGCritic (class in rlcc.learn)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -232,6 +243,14 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="schedule.html#rlcc.schedule.ExponentialSchedule">ExponentialSchedule (class in rlcc.schedule)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="model.html#rlcc.model.hard_update">hard_update() (in module rlcc.model)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -255,14 +274,22 @@
         <li><a href="learn.html#rlcc.learn.StackedLearner.learn">(rlcc.learn.StackedLearner method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="learn.html#rlcc.learn.Learner">Learner (class in rlcc.learn)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="learn.html#rlcc.learn.LearningStrategy">LearningStrategy (class in rlcc.learn)</a>
 </li>
       <li><a href="schedule.html#rlcc.schedule.LinearSchedule">LinearSchedule (class in rlcc.schedule)</a>
 </li>
+      <li><a href="learn.html#rlcc.learn.DoubleLearningStrategy.loss">loss() (rlcc.learn.DoubleLearningStrategy method)</a>
+
+      <ul>
+        <li><a href="learn.html#rlcc.learn.DPGActor.loss">(rlcc.learn.DPGActor method)</a>
+</li>
+        <li><a href="learn.html#rlcc.learn.DPGCritic.loss">(rlcc.learn.DPGCritic method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -290,8 +317,6 @@
       <ul>
         <li><a href="observe.html#rlcc.observe.Observer.observe">(rlcc.observe.Observer method)</a>
 </li>
-        <li><a href="observe.html#rlcc.observe.PreprocessingObserver.observe">(rlcc.observe.PreprocessingObserver method)</a>
-</li>
         <li><a href="observe.html#rlcc.observe.StackedObserver.observe">(rlcc.observe.StackedObserver method)</a>
 </li>
       </ul></li>
@@ -304,25 +329,21 @@
   </ul></td>
 </tr></table>
 
-<h2 id="P">P</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="observe.html#rlcc.observe.PreprocessingObserver">PreprocessingObserver (class in rlcc.observe)</a>
-</li>
-  </ul></td>
-</tr></table>
-
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="learn.html#rlcc.learn.ReplayLearner">ReplayLearner (class in rlcc.learn)</a>
 </li>
-      <li><a href="noise.html#rlcc.noise.NoiseProcess.reset">reset() (rlcc.noise.NoiseProcess method)</a>
+      <li><a href="noise.html#rlcc.noise.DeviceNoiseProcess.reset">reset() (rlcc.noise.DeviceNoiseProcess method)</a>
 
       <ul>
+        <li><a href="noise.html#rlcc.noise.NoiseProcess.reset">(rlcc.noise.NoiseProcess method)</a>
+</li>
         <li><a href="noise.html#rlcc.noise.OUProcess.reset">(rlcc.noise.OUProcess method)</a>
 </li>
-        <li><a href="noise.html#rlcc.noise.ScheduledOUProcess.reset">(rlcc.noise.ScheduledOUProcess method)</a>
+        <li><a href="noise.html#rlcc.noise.ScaledProcess.reset">(rlcc.noise.ScaledProcess method)</a>
+</li>
+        <li><a href="noise.html#rlcc.noise.ScheduledScaledProcess.reset">(rlcc.noise.ScheduledScaledProcess method)</a>
 </li>
         <li><a href="schedule.html#rlcc.schedule.ExponentialSchedule.reset">(rlcc.schedule.ExponentialSchedule method)</a>
 </li>
@@ -331,15 +352,17 @@
         <li><a href="schedule.html#rlcc.schedule.Schedule.reset">(rlcc.schedule.Schedule method)</a>
 </li>
       </ul></li>
-      <li><a href="rlcc.html#rlcc.Transition.reward">reward (rlcc.Transition attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="rlcc.html#rlcc.Transition.reward">reward (rlcc.Transition attribute)</a>
+</li>
       <li><a href="rlcc.html#module-rlcc">rlcc (module)</a>
 </li>
       <li><a href="act.html#module-rlcc.act">rlcc.act (module)</a>
 </li>
       <li><a href="learn.html#module-rlcc.learn">rlcc.learn (module)</a>
+</li>
+      <li><a href="model.html#module-rlcc.model">rlcc.model (module)</a>
 </li>
       <li><a href="noise.html#module-rlcc.noise">rlcc.noise (module)</a>
 </li>
@@ -357,32 +380,44 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="noise.html#rlcc.noise.NoiseProcess.sample">sample() (rlcc.noise.NoiseProcess method)</a>
+      <li><a href="noise.html#rlcc.noise.DeviceNoiseProcess.sample">sample() (rlcc.noise.DeviceNoiseProcess method)</a>
 
       <ul>
+        <li><a href="noise.html#rlcc.noise.NoiseProcess.sample">(rlcc.noise.NoiseProcess method)</a>
+</li>
         <li><a href="noise.html#rlcc.noise.OUProcess.sample">(rlcc.noise.OUProcess method)</a>
 </li>
-        <li><a href="noise.html#rlcc.noise.ScheduledOUProcess.sample">(rlcc.noise.ScheduledOUProcess method)</a>
+        <li><a href="noise.html#rlcc.noise.ScaledProcess.sample">(rlcc.noise.ScaledProcess method)</a>
+</li>
+        <li><a href="noise.html#rlcc.noise.ScheduledScaledProcess.sample">(rlcc.noise.ScheduledScaledProcess method)</a>
 </li>
       </ul></li>
+      <li><a href="noise.html#rlcc.noise.ScaledProcess">ScaledProcess (class in rlcc.noise)</a>
+</li>
       <li><a href="schedule.html#rlcc.schedule.Schedule">Schedule (class in rlcc.schedule)</a>
 </li>
-      <li><a href="noise.html#rlcc.noise.ScheduledOUProcess">ScheduledOUProcess (class in rlcc.noise)</a>
+      <li><a href="noise.html#rlcc.noise.ScheduledScaledProcess">ScheduledScaledProcess (class in rlcc.noise)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="model.html#rlcc.model.soft_update">soft_update() (in module rlcc.model)</a>
+</li>
       <li><a href="act.html#rlcc.act.StackedActor">StackedActor (class in rlcc.act)</a>
 </li>
       <li><a href="learn.html#rlcc.learn.StackedLearner">StackedLearner (class in rlcc.learn)</a>
+</li>
+      <li><a href="learn.html#rlcc.learn.StackedLearningStrategy">StackedLearningStrategy (class in rlcc.learn)</a>
 </li>
       <li><a href="observe.html#rlcc.observe.StackedObserver">StackedObserver (class in rlcc.observe)</a>
 </li>
       <li><a href="rlcc.html#rlcc.Transition.state">state (rlcc.Transition attribute)</a>
 </li>
-      <li><a href="learn.html#rlcc.learn.DPG.step">step() (rlcc.learn.DPG method)</a>
+      <li><a href="learn.html#rlcc.learn.DoubleLearningStrategy.step">step() (rlcc.learn.DoubleLearningStrategy method)</a>
 
       <ul>
         <li><a href="learn.html#rlcc.learn.LearningStrategy.step">(rlcc.learn.LearningStrategy method)</a>
+</li>
+        <li><a href="learn.html#rlcc.learn.StackedLearningStrategy.step">(rlcc.learn.StackedLearningStrategy method)</a>
 </li>
       </ul></li>
   </ul></td>

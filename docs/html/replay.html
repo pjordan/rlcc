@@ -83,6 +83,7 @@
 <li class="toctree-l1"><a class="reference internal" href="rlcc.html">rlcc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="act.html">rlcc.act</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learn.html">rlcc.learn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">rlcc.model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="noise.html">rlcc.noise</a></li>
 <li class="toctree-l1"><a class="reference internal" href="observe.html">rlcc.observe</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">rlcc.replay</a></li>
@@ -127,6 +128,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -139,7 +142,10 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/replay.rst.txt" rel="nofollow"> View page source</a>
+            
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/pjordan/rlcc" class="fa fa-github"> Edit on GitHub</a>
+            
           
         
       </li>
@@ -157,12 +163,11 @@
 <p>Transition-related functions</p>
 <dl class="class">
 <dt id="rlcc.replay.TransitionReplayer">
-<em class="property">class </em><code class="descclassname">rlcc.replay.</code><code class="descname">TransitionReplayer</code><span class="sig-paren">(</span><em>transitions</em>, <em>device=None</em>, <em>batch_size=1</em>, <em>collate_fn=&lt;function default_collate&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/replay.html#TransitionReplayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.replay.TransitionReplayer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">rlcc.replay.</code><code class="descname">TransitionReplayer</code><span class="sig-paren">(</span><em>transitions</em>, <em>batch_size=1</em>, <em>collate_fn=&lt;function default_collate&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/replay.html#TransitionReplayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.replay.TransitionReplayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transition Replayer.</p>
 <dl class="docutils">
 <dt>Arguments:</dt>
 <dd>transitions: dataset from which to replay the transitions.
-device (string, optional): the device to send the transition data to
 batch_size (int, optional): how many samples per batch to load (default: 1).
 collate_fn (callable, optional): merges a list of samples to form a mini-batch.</dd>
 </dl>

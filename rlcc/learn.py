@@ -1,13 +1,19 @@
+r"""Learning and related functionality."""
+
+
 from itertools import islice 
 import torch.nn.functional as F
 import torch.nn.utils as nn_utils
 from .replay import TransitionReplayer
+from .model import soft_update
 
 class Learner():
     r"""Base class for all learners.
+    
+    Your learners should also subclass this class.
     """
-
     def __init__(self):
+        r"""Constructor method"""
         pass
 
     def learn(self):
@@ -15,10 +21,13 @@ class Learner():
         raise NotImplementedError
 
 class StackedLearner(Learner):
-    """Implements a learner that delegates to other learners.
-    """
+    r"""Implements a learner that delegates to other learners.
 
+    :param learners: list of learners
+    :type learners: list of :class:`rlcc.learn.Learner`
+    """
     def __init__(self, learners):
+        r"""Constructor method"""
         super(StackedLearner, self).__init__()
         self.learners = learners
         
@@ -28,15 +37,26 @@ class StackedLearner(Learner):
             learner.learn()
 
 class ReplayLearner(Learner):
-    """Implements a learner using a replay buffer.
+    r"""Implements a learner using a replay buffer.
+    
+    :param learning_strategy: delegate learning strategy
+    :type learning_strategy: :class:`rlcc.learn.LearningStrategy`
+    :param transitions: list of transitions
+    :type transitions: list of :class:`rlcc.Transition`
+    :param device: the torch device
+    :type device: str, optional
+    :param batch_size: the batch size
+    :type batch_size: int, optional
+    :param batches_per_step: the number of batches per step
+    :type batches_per_step: int, optional
     """
-
-    def __init__(self, learning_strategy, transitions, device=None, batch_size=128, batches_per_step=1):
+    def __init__(self, learning_strategy, transitions, batch_size=128, batches_per_step=1):
+        r"""Constructor method"""
         super(ReplayLearner, self).__init__()
         self.learning_strategy = learning_strategy
         self.batch_size = batch_size
         self.batches_per_step = batches_per_step
-        self.replayer = TransitionReplayer(transitions, device=device, batch_size=batch_size)
+        self.replayer = TransitionReplayer(transitions, batch_size=batch_size)
 
     def learn(self):
         r"""Performs a single learning step."""
@@ -46,93 +66,220 @@ class ReplayLearner(Learner):
 
 class LearningStrategy():
     r"""Base class for all learning strategies.
+
+    Your learning strategies should also subclass this class.
     """
 
     def __init__(self):
+        r"""Constructor method"""
         pass
 
     def step(self, transitions):
         r"""Performs a single learning step.
 
-        Arguments:
-            transitions (list of Transition): transitions
+        :param transitions: a list of :class:`rlcc.Transition`
+        :type transitions: :class:`rlcc.Transition`
         """
         raise NotImplementedError
 
 
-class DPG(LearningStrategy):
-    """Implements Deterministic Policy Gradient.
-    """
+class StackedLearningStrategy(LearningStrategy):
+    r"""Implements stacked learning strategy
 
-    def __init__(self, actor_triad, critic_triad, device,
-                 gamma=0.99, tau=1e-3, writer=None, write_frequency=1, write_prefix='',
-                 actor_norm_clip=None, critic_norm_clip=None):
-        super(DPG, self).__init__()
-        self.gamma = gamma
-        self.tau = tau
-        self.actor_triad = actor_triad
-        self.critic_triad = critic_triad
-        self.writer = writer
-        self.learning_steps = 0
-        self.write_frequency = write_frequency
-        self.write_prefix = write_prefix
-        self.actor_norm_clip = actor_norm_clip
-        self.critic_norm_clip = critic_norm_clip
+    :param strategies: list of learning strategies
+    :type strategies: list of :class:`rlcc.learn.LearningStrategy`
+    """
+    def __init__(self, strategies):
+        r"""Constructor method"""
+        super(StackedLearningStrategy, self).__init__()
+        self.strategies = strategies
 
     def step(self, transitions):
         r"""Performs a single learning step.
 
-        Arguments:
-            transitions (list of Transition): transitions
+        :param transitions: a list of :class:`rlcc.Transition`
+        :type transitions: :class:`rlcc.Transition`
+        """
+        for strategy in self.strategies:
+            strategy.step(transitions)
+
+
+class DoubleLearningStrategy(LearningStrategy):
+    r"""Implements a double learning strategy.
+    
+    :param local: the local network
+    :type local: :class:`torch.nn.Module`
+    :param target: the target network
+    :type target: :class:`torch.nn.Module`
+    :param optimizer: the optimizer
+    :type optimizer: :class:`torch.nn.Module`
+    :param tau: the update weight
+    :type tau: float, optional
+    :param clip_norm: the gradient norm maximum
+    :type clip_norm: float, optional
+    :param clip_value: the gradient value maximum
+    :type clip_value: float, optional
+    """
+    def __init__(self, 
+                 local, 
+                 target,
+                 optimizer,
+                 tau=1e-3, 
+                 clip_norm=None,
+                 clip_value=None):
+        r"""Constructor method"""
+        super(DoubleLearningStrategy, self).__init__()
+        self.tau = tau
+        self.local = local
+        self.target = target
+        self.optimizer = optimizer
+        self.observers = []
+        self.clip_norm = clip_norm
+        self.clip_value = clip_value
+        self.learning_steps = 0
+
+    def step(self, transitions):
+        r"""Performs a single learning step.
+
+        :param transitions: a list of :class:`rlcc.Transition`
+        :type transitions: :class:`rlcc.Transition`
+        """
+        # Compute actor loss
+        loss = self.loss(transitions)
+        # Minimize the loss
+        self.optimizer.zero_grad()
+        loss.backward()
+        # Clip the gradient
+        if self.clip_norm:
+            nn_utils.clip_grad_norm_(self.local.parameters(), self.clip_norm)
+        if self.clip_value:
+            nn_utils.clip_grad_value_(self.local.parameters(), self.clip_value)
+        # Optimize
+        self.optimizer.step()
+        # Notify the observers
+        for obs in self.observers:
+            obs(transitions=transitions, local=self.local, loss=loss, learning_steps=self.learning_steps)
+        # soft updates
+        soft_update(self.target, self.local, self.tau)
+
+        # update counts
+        self.learning_steps += 1
+
+    def loss(self, transitions):
+        r"""Compute the loss of the transitions
+
+        :param transitions: a list of :class:`rlcc.Transition`
+        :type transitions: :class:`rlcc.Transition`
+        """
+        raise NotImplementedError
+
+
+class DPGActor(DoubleLearningStrategy):
+    r"""Implements Deterministic Policy Gradient Actor learner.
+    
+    :param actor_local: the local network
+    :type actor_local: :class:`torch.nn.Module`
+    :param actor_target: the target network
+    :type actor_target: :class:`torch.nn.Module`
+    :param actor_optimizer: the optimizer
+    :type actor_optimizer: :class:`torch.nn.Module`
+    :param critic: the critic
+    :type critic: :class:`torch.nn.Module`
+    :param tau: the update weight
+    :type tau: float, optional
+    :param observers: list of observers
+    :type observers: list of observers, optional
+    :param clip_norm: the gradient norm maximum
+    :type clip_norm: float, optional
+    :param clip_value: the gradient value maximum
+    :type clip_value: float, optional
+    """
+    def __init__(self, 
+                 actor_local,
+                 actor_target,
+                 actor_optimizer, 
+                 critic,
+                 tau=1e-3,
+                 clip_norm=None,
+                 clip_value=None):
+        r"""Constructor method"""
+        super(DPGActor, self).__init__(
+            actor_local, 
+            actor_target,
+            actor_optimizer,
+            tau=tau,
+            clip_norm=clip_norm,
+            clip_value=clip_value)
+        self.critic = critic
+
+    def loss(self, transitions):
+        r"""Compute the loss of the transitions
+
+        :param transitions: a list of :class:`rlcc.Transition`
+        :type transitions: :class:`rlcc.Transition`
+        """
+        # Unpack tuples
+        states, _, _, _, _ = transitions
+        return -self.critic(states, self.local(states)).mean()
+
+
+class DPGCritic(DoubleLearningStrategy):
+    r"""Implements Deterministic Policy Gradient Critic learner.
+    
+    :param critic_local: the local network
+    :type critic_local: :class:`torch.nn.Module`
+    :param critic_target: the target network
+    :type critic_target: :class:`torch.nn.Module`
+    :param critic_optimizer: the optimizer
+    :type critic_optimizer: :class:`torch.nn.Module`
+    :param actor: the actor
+    :type actor: :class:`torch.nn.Module`
+    :param tau: the update weight
+    :type tau: float, optional
+    :param observers: list of observers
+    :type observers: list of observers, optional
+    :param clip_norm: the gradient norm maximum
+    :type clip_norm: float, optional
+    :param clip_value: the gradient value maximum
+    :type clip_value: float, optional
+    """
+    def __init__(self, 
+                 critic_local,
+                 critic_target,
+                 critic_optimizer, 
+                 actor,
+                 gamma=0.99, 
+                 tau=1e-3,
+                 clip_norm=None,
+                 clip_value=None):
+        r"""Constructor method"""
+        super(DPGCritic, self).__init__(
+            critic_local, 
+            critic_target,
+            critic_optimizer,
+            tau=tau,
+            clip_norm=clip_norm,
+            clip_value=clip_value)
+        self.gamma = gamma
+        self.actor = actor
+
+    def loss(self, transitions):
+        r"""Compute the loss of the transitions
+
+        :param transitions: a list of :class:`rlcc.Transition`
+        :type transitions: :class:`rlcc.Transition`
         """
         # Unpack tuples
         states, actions, rewards, next_states, is_terminals = transitions
-        actor_local, actor_target, actor_optimizer = self.actor_triad
-        critic_local, critic_target, critic_optimizer = self.critic_triad
-        
+              
         # Get predicted next-state actions and Q values from target models
-        actions_next = actor_target(next_states)
-        q_targets_next = critic_target(next_states, actions_next)
+        actions_next = self.actor(next_states)
+        q_targets_next = self.target(next_states, actions_next)
         
         # Compute Q targets for current states
         q_targets = rewards + (self.gamma * q_targets_next * (1 - is_terminals))
-        # Compute critic loss
-        q_expected = critic_local(states, actions)
-        critic_loss = F.mse_loss(q_expected, q_targets)
-        # Minimize the loss
-        critic_optimizer.zero_grad()
-        critic_loss.backward()
-        if self.critic_norm_clip:
-            nn_utils.clip_grad_norm_(critic_local.parameters(), self.critic_norm_clip)
-        critic_optimizer.step()
-
-        if self.writer is not None:
-            self.writer.add_scalar('data/'+self.write_prefix+'critic_loss',critic_loss, self.learning_steps)
-            if self.learning_steps % self.write_frequency == 0:
-                for n, p in filter(lambda np: np[1].grad is not None, critic_local.named_parameters()):
-                    self.writer.add_histogram(self.write_prefix+"critic_local."+n+".grad", p.grad.data.cpu().numpy(), global_step=self.learning_steps)
-                    self.writer.add_histogram(self.write_prefix+"critic_local."+n, p.data.cpu().numpy(), global_step=self.learning_steps)
-                    
-        # Compute actor loss
-        actions_pred = actor_local(states)
-        actor_loss = -critic_local(states, actions_pred).mean()
-        # Minimize the loss
-        actor_optimizer.zero_grad()
-        actor_loss.backward()
-        if self.actor_norm_clip:
-            nn_utils.clip_grad_norm_(actor_local.parameters(), self.actor_norm_clip)
-        actor_optimizer.step()
-
-        if self.writer is not None:
-            self.writer.add_scalar('data/'+self.write_prefix+'actor_loss',actor_loss, self.learning_steps)
-            if self.learning_steps % self.write_frequency == 0:
-                for n, p in filter(lambda np: np[1].grad is not None, actor_local.named_parameters()):
-                    self.writer.add_histogram(self.write_prefix+"actor_local."+n+".grad", p.grad.data.cpu().numpy(), global_step=self.learning_steps)
-                    self.writer.add_histogram(self.write_prefix+"actor_local."+n, p.data.cpu().numpy(), global_step=self.learning_steps)
-                    
-        # soft updates
-        self.critic_triad.soft_update(self.tau)
-        self.actor_triad.soft_update(self.tau)
         
-        # update counts
-        self.learning_steps += 1
+        # Compute critic loss
+        q_expected = self.local(states, actions)
+        return F.mse_loss(q_expected, q_targets)
+

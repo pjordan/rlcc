@@ -26,17 +26,18 @@ __all__ = [
 Transition = namedtuple(
     "Transition",
     field_names=["state", "action", "reward", "next_state", "is_terminal"])
+Transition.state.__doc__ += ': The state the transition is from.'
+Transition.action.__doc__ += ': The action taken in the transition.'
+Transition.reward.__doc__ += ': The reward for transitioning.'
+Transition.next_state.__doc__ += ': The state the transition is to.'
+Transition.is_terminal.__doc__ += ': If terminal then 1.0, 0.0 otherwise.'
 
 
 def transition(*args):
     r"""Creates a transition object from arguments.
 
-    Arguments:
-        state (tensor): The state the transition is from.
-        action (tensor): The action taken in the transition.
-        reward (tensor): The reward for transitioning.
-        next_state (tensor): The state the transition is to.
-        is_terminal (tensor): If terminal then 1.0, 0.0 otherwise.
+    :param args: tuple of (state, action, reward, next_state, is_terminal) tensors 
+    :type args: tensors   
     """
     return Transition(*args)
 
@@ -46,21 +47,18 @@ def tensor(data):
     r"""Constructs a torch `tensor` with data that returns
     a tensor of float data type.
 
-    Arguments:
-        data (array_like) – Initial data for the tensor. 
-        Can be a list, tuple, NumPy ndarray, scalar, and other types.
+    :param data: data for the tensor. 
+    :type data: Can be a list, tuple, NumPy ndarray, scalar, and other types.
     """
     return torch.tensor(data, dtype=torch.float)
 
 
 def to_device(iterable, device):
-    r"""Creates a transition object from non-tensor arguments.
+    r"""Send iterable contents to device.
 
-    Arguments:
-        state (numpy array): The state the transition is from.
-        action (numpy array): The action taken in the transition.
-        reward (numpy array): The reward for transitioning.
-        next_state (numpy array): The state the transition is to.
-        is_terminal (numpy array): If terminal then 1.0, 0.0 otherwise.
+    :param iterable: the iterable
+    :type iterable: iterable
+    :param device: the torch device
+    :type device: str
     """
     return map(lambda x: x.to(device), iterable)

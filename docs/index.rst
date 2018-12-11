@@ -8,12 +8,20 @@
 .. include:: welcome.rst
 
 .. toctree::
+   :glob:
+   :maxdepth: 1
+   :caption: Notes
+
+   notes/*
+
+.. toctree::
    :maxdepth: 1
    :caption: Package Reference
 
    rlcc
    act
    learn
+   model
    noise
    observe
    replay

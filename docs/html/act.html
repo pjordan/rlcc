@@ -28,7 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Installation" href="installing.html" /> 
+    <link rel="next" title="rlcc.learn" href="learn.html" />
+    <link rel="prev" title="rlcc" href="rlcc.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -77,13 +78,17 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="installing.html">Installation</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Package Reference</span></p>
+              <p class="caption"><span class="caption-text">Package Reference</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="rlcc.html">rlcc</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">rlcc.act</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learn.html">rlcc.learn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">rlcc.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="noise.html">rlcc.noise</a></li>
+<li class="toctree-l1"><a class="reference internal" href="observe.html">rlcc.observe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replay.html">rlcc.replay</a></li>
+<li class="toctree-l1"><a class="reference internal" href="schedule.html">rlcc.schedule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="storage.html">rlcc.storage</a></li>
 </ul>
 
             
@@ -150,14 +155,16 @@
             
   <div class="section" id="module-rlcc.act">
 <span id="rlcc-act"></span><h1>rlcc.act<a class="headerlink" href="#module-rlcc.act" title="Permalink to this headline">¶</a></h1>
+<p>Actor and related functionality.</p>
 <dl class="class">
 <dt id="rlcc.act.Actor">
 <em class="property">class </em><code class="descclassname">rlcc.act.</code><code class="descname">Actor</code><a class="reference internal" href="_modules/rlcc/act.html#Actor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.Actor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for all actors.</p>
+<p>Your actors should also subclass this class.</p>
 <dl class="method">
 <dt id="rlcc.act.Actor.act">
 <code class="descname">act</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#Actor.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.Actor.act" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns actions for given state as numpy array.</p>
+<dd><p>Returns actions for given state as tensor.</p>
 </dd></dl>
 
 </dd></dl>
@@ -166,22 +173,43 @@
 <dt id="rlcc.act.ClippingActor">
 <em class="property">class </em><code class="descclassname">rlcc.act.</code><code class="descname">ClippingActor</code><span class="sig-paren">(</span><em>base_actor</em>, <em>action_min=-1</em>, <em>action_max=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#ClippingActor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.ClippingActor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements an actor policy that clips the actions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>base_actor</strong> – the actor whose actions noise is added.</li>
+<li><strong>action_min</strong> (<em>scalar</em><em> or </em><em>numpy.Array</em><em>, </em><em>optional</em>) – Minimal action value</li>
+<li><strong>action_max</strong> (<em>scalar</em><em> or </em><em>numpy.Array</em><em>, </em><em>optional</em>) – Maximal action value</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="rlcc.act.ClippingActor.act">
 <code class="descname">act</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#ClippingActor.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.ClippingActor.act" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns actions for given state as numpy array.</p>
+<dd><p>Returns actions for given state as tensor.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="rlcc.act.NetworkActor">
-<em class="property">class </em><code class="descclassname">rlcc.act.</code><code class="descname">NetworkActor</code><span class="sig-paren">(</span><em>network</em>, <em>device</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#NetworkActor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.NetworkActor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implements Deterministic Policy Gradient.</p>
+<em class="property">class </em><code class="descclassname">rlcc.act.</code><code class="descname">NetworkActor</code><span class="sig-paren">(</span><em>network</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#NetworkActor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.NetworkActor" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is an implementation of an actor whose policy is encoded as a network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>network</strong> (class:<cite>torch.nn.Module</cite>) – A network that returns an action for a state</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="rlcc.act.NetworkActor.act">
 <code class="descname">act</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#NetworkActor.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.NetworkActor.act" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns actions for given state as numpy array.</p>
+<dd><p>Returns actions for given state as tensor.</p>
 </dd></dl>
 
 </dd></dl>
@@ -190,10 +218,22 @@
 <dt id="rlcc.act.NoisyActor">
 <em class="property">class </em><code class="descclassname">rlcc.act.</code><code class="descname">NoisyActor</code><span class="sig-paren">(</span><em>base_actor</em>, <em>noise_process</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#NoisyActor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.NoisyActor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements a noisy actor policy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>base_actor</strong> (class:<cite>rlcc.act.Actor</cite>) – the actor whose actions noise is added.</li>
+<li><strong>noise_process</strong> (<a class="reference internal" href="noise.html#rlcc.noise.NoiseProcess" title="rlcc.noise.NoiseProcess"><em>rlcc.noise.NoiseProcess</em></a>) – Device where the states should be sent</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="rlcc.act.NoisyActor.act">
 <code class="descname">act</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#NoisyActor.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.NoisyActor.act" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns actions for given state as numpy array.</p>
+<dd><p>Returns actions for given state as tensor.</p>
 </dd></dl>
 
 </dd></dl>
@@ -201,10 +241,19 @@
 <dl class="class">
 <dt id="rlcc.act.StackedActor">
 <em class="property">class </em><code class="descclassname">rlcc.act.</code><code class="descname">StackedActor</code><span class="sig-paren">(</span><em>actors</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#StackedActor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.StackedActor" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><p>Creates a network actor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>actors</strong> (class:<cite>rlcc.act.Actor</cite>) – list of actors</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
 <dt id="rlcc.act.StackedActor.act">
 <code class="descname">act</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rlcc/act.html#StackedActor.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rlcc.act.StackedActor.act" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns actions for given state as numpy array.</p>
+<dd><p>Returns actions for given state as tensor.</p>
 </dd></dl>
 
 </dd></dl>
@@ -219,8 +268,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="learn.html" class="btn btn-neutral float-right" title="rlcc.learn" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="installing.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="rlcc.html" class="btn btn-neutral" title="rlcc" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

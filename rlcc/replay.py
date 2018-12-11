@@ -1,8 +1,6 @@
 r"""Transition-related functions"""
 
 
-import random
-import numpy as np
 import torch
 from . import transition
 
@@ -26,18 +24,14 @@ class _TransitionReplayerIter(object):
         self.transitions = replayer.transitions
         self.batch_size = replayer.batch_size
         self.collate_fn = replayer.collate_fn
-        self.device = replayer.device
 
     def __len__(self):
         return len(self.transitions)
     
     def __next__(self):
-        batch = self.collate_fn(random.sample(self.transitions, k=self.batch_size))
-        if self.device:
-            return to_device(batch, self.device)
-        else:
-            return batch
-        
+        indices = torch.randint(high=len(self.transitions), size=(self.batch_size,), dtype=torch.int64).tolist()
+        return self.collate_fn([self.transitions[i] for i in indices])
+
     def __iter__(self):
         return self
 
@@ -48,18 +42,16 @@ class TransitionReplayer(object):
 
     Arguments:
         transitions: dataset from which to replay the transitions.
-        device (string, optional): the device to send the transition data to
         batch_size (int, optional): how many samples per batch to load (default: 1).
         collate_fn (callable, optional): merges a list of samples to form a mini-batch.
     """
 
     __initialized = False
 
-    def __init__(self, transitions, device=None, batch_size=1, collate_fn=default_collate):
+    def __init__(self, transitions, batch_size=1, collate_fn=default_collate):
         self.transitions = transitions
         self.batch_size = batch_size
         self.collate_fn = collate_fn
-        self.device = device
         self.__initialized = True
 
     def __setattr__(self, attr, val):

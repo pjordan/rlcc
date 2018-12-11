@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="rlcc" href="rlcc.html" /> 
+    <link rel="next" title="Exploration" href="notes/exploration.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -77,11 +77,16 @@
               
             
             
-              <p class="caption"><span class="caption-text">Package Reference</span></p>
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notes/exploration.html">Exploration</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="rlcc.html">rlcc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="act.html">rlcc.act</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learn.html">rlcc.learn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">rlcc.model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="noise.html">rlcc.noise</a></li>
 <li class="toctree-l1"><a class="reference internal" href="observe.html">rlcc.observe</a></li>
 <li class="toctree-l1"><a class="reference internal" href="replay.html">rlcc.replay</a></li>
@@ -158,7 +163,29 @@
             
   <div class="section" id="welcome-to-rlcc-s-documentation">
 <h1>Welcome to rlcc’s documentation!<a class="headerlink" href="#welcome-to-rlcc-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Reinforcement learning common components</p>
+<p>The Reinforcement learning common components (rlcc) package
+contains basic functionality to aid in creating RL agents.</p>
+<p>Agent components are classified into three basic stages:</p>
+<ul class="simple">
+<li>act: take some action based on a state</li>
+<li>observe: observe the result of taking the action</li>
+<li>learn: learn from history</li>
+</ul>
+<p>These stages form a loop while interacting with the environment.
+The basic structure is shown below in pseudo-code.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>  <span class="c1"># initial state for episode</span>
+<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="n">action</span> <span class="o">=</span> <span class="n">actor</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">is_terminal</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+    <span class="n">transition</span> <span class="o">=</span> <span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">next_state</span><span class="p">,</span> <span class="n">is_terminal</span><span class="p">)</span>
+    <span class="n">observer</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">transition</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
+    <span class="k">if</span> <span class="n">is_terminal</span><span class="p">:</span>
+        <span class="k">break</span>
+<span class="n">learner</span><span class="o">.</span><span class="n">learn</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Examples are available at <a class="reference external" href="https://github.com/pjordan/rlcc/examples/">https://github.com/pjordan/rlcc/examples/</a></p>
 </div>
 <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
@@ -167,11 +194,18 @@
 </pre></div>
 </div>
 <div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notes/exploration.html">Exploration</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Package Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="rlcc.html">rlcc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="act.html">rlcc.act</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learn.html">rlcc.learn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">rlcc.model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="noise.html">rlcc.noise</a></li>
 <li class="toctree-l1"><a class="reference internal" href="observe.html">rlcc.observe</a></li>
 <li class="toctree-l1"><a class="reference internal" href="replay.html">rlcc.replay</a></li>
@@ -197,7 +231,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="rlcc.html" class="btn btn-neutral float-right" title="rlcc" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="notes/exploration.html" class="btn btn-neutral float-right" title="Exploration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
