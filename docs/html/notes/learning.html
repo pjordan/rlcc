@@ -1,0 +1,270 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Learning &mdash; rlcc  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Replay Buffer" href="replay_buffer.html" />
+    <link rel="prev" title="Exploration" href="exploration.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> rlcc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="exploration.html">Exploration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replay_buffer.html">Replay Buffer</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rlcc.html">rlcc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../act.html">rlcc.act</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../learn.html">rlcc.learn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model.html">rlcc.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../noise.html">rlcc.noise</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../observe.html">rlcc.observe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replay.html">rlcc.replay</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../schedule.html">rlcc.schedule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../storage.html">rlcc.storage</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">rlcc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Learning</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/pjordan/rlcc" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="learning">
+<h1>Learning<a class="headerlink" href="#learning" title="Permalink to this headline">¶</a></h1>
+<p><cite>rlcc</cite> supports learning through two abstract classes: <cite>rlcc.learn.Learner</cite> and <cite>rlcc.learn.LearningStrategy</cite>.
+The classes are designed to be used in a strategy pattern, where the learner delegates stepwise learning
+to the learning strategy.</p>
+<p>The <cite>rlcc.learn.ReplayLearner</cite> class provides an example of a concrete learner.  The replay learner accepts
+a learning strategy and source of transitions to learn from (replay buffer for example).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rlcc.learn</span> <span class="kn">import</span> <span class="n">ReplayLearner</span>
+
+<span class="n">transitions</span> <span class="o">=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="c1"># collection of transition objects.</span>
+<span class="n">learning_strategy</span> <span class="o">=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="c1"># Learning strategy described later.</span>
+<span class="n">learner</span> <span class="o">=</span> <span class="n">ReplayLearner</span><span class="p">(</span><span class="n">learning_strategy</span><span class="p">,</span> <span class="n">transitions</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Within a learning loop, we simply call</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">learner</span><span class="o">.</span><span class="n">learn</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>to iterate the learning process.</p>
+<p>The <cite>rlcc</cite> contains several learning strategies.  Each learning strategy accepts
+a batch of transition examples (a torch tensor) to incrementally learn from.</p>
+<p>A abstract <cite>rlcc.learn.DoubleLearningStrategy</cite> accepts a triple of (local network, target network, optimizer).
+Implementing classes define a loss function.  For example, <cite>rlcc.learn.DPGActor</cite> defines the DPG actor loss fuction,
+instantiated as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rlcc.learn</span> <span class="kn">import</span> <span class="n">DPGActor</span>
+
+<span class="n">actor_local</span> <span class="o">=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="c1"># network that accepts states and outputs actions</span>
+<span class="n">actor_target</span> <span class="o">=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="c1"># network with identical architecture to the local network</span>
+<span class="n">actor_optimizer</span> <span class="o">=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="c1"># Local network optimizer</span>
+<span class="n">critic</span> <span class="o">=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="c1"># Network that accepts (state, action) pairs and outputs the q-estimates</span>
+<span class="n">learner</span> <span class="o">=</span> <span class="n">DPGActor</span><span class="p">(</span><span class="n">actor_local</span><span class="p">,</span> <span class="n">actor_target</span><span class="p">,</span> <span class="n">actor_optimizer</span><span class="p">,</span> <span class="n">critic</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Sometimes, as in DPG, we need to train multiple networks.  In this case, we can use an
+<cite>rlcc.learn.StackedLearningStrategy</cite> to coordinate learning amonst multiple strategies.
+For example, we can construct an actor-critic stacked learning strategy.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rlcc.learn</span> <span class="kn">import</span> <span class="n">StackedLearningStrategy</span>
+
+<span class="n">actor_stategy</span> <span class="o">=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<span class="n">critic_stategy</span> <span class="o">=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<span class="n">actor_critic_strategy</span> <span class="o">=</span> <span class="n">StackedLearningStrategy</span><span class="p">([</span><span class="n">critic_stategy</span><span class="p">,</span> <span class="n">actor_stategy</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="replay_buffer.html" class="btn btn-neutral float-right" title="Replay Buffer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="exploration.html" class="btn btn-neutral" title="Exploration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Patrick R. Jordan
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

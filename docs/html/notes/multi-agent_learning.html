@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview: module code &mdash; rlcc  documentation</title>
+  <title>Multi-Agent Learning &mdash; rlcc  documentation</title>
   
 
   
@@ -27,7 +27,9 @@
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Replay Buffer" href="replay_buffer.html" />
+    <link rel="prev" title="Learning" href="learning.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -77,11 +79,11 @@
             
             
               <p class="caption"><span class="caption-text">Notes</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../notes/exploration.html">Exploration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notes/learning.html">Learning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notes/multi-agent_learning.html">Multi-Agent Learning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notes/replay_buffer.html">Replay Buffer</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="exploration.html">Exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">Learning</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Multi-Agent Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replay_buffer.html">Replay Buffer</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Package Reference</span></p>
 <ul>
@@ -133,16 +135,25 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Overview: module code</li>
+      <li>Multi-Agent Learning</li>
     
     
       <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/pjordan/rlcc" class="fa fa-github"> Edit on GitHub</a>
+            
+          
         
       </li>
     
@@ -154,22 +165,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>All modules for which code is available</h1>
-<ul><li><a href="rlcc.html">rlcc</a></li>
-<ul><li><a href="rlcc/act.html">rlcc.act</a></li>
-<li><a href="rlcc/learn.html">rlcc.learn</a></li>
-<li><a href="rlcc/model.html">rlcc.model</a></li>
-<li><a href="rlcc/noise.html">rlcc.noise</a></li>
-<li><a href="rlcc/observe.html">rlcc.observe</a></li>
-<li><a href="rlcc/replay.html">rlcc.replay</a></li>
-<li><a href="rlcc/schedule.html">rlcc.schedule</a></li>
-<li><a href="rlcc/storage.html">rlcc.storage</a></li>
-</ul></ul>
+  <div class="section" id="multi-agent-learning">
+<h1>Multi-Agent Learning<a class="headerlink" href="#multi-agent-learning" title="Permalink to this headline">¶</a></h1>
+<p>The <cite>rlcc</cite> packages supports multi-agent learning through stacked classes:</p>
+<ul class="simple">
+<li><cite>rlcc.act.StackedActor</cite></li>
+<li><cite>rlcc.observe.StackedObserver</cite></li>
+<li><cite>rlcc.learn.StackedLearner</cite></li>
+</ul>
+<p>Each of these classes makes an underlying assumption that the input will be a list,
+one per agent.  Learning, observing, and acting can then be composed of independent
+instances per agent.</p>
+</div>
+
 
            </div>
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="replay_buffer.html" class="btn btn-neutral float-right" title="Replay Buffer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="learning.html" class="btn btn-neutral" title="Learning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
